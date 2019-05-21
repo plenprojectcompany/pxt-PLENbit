@@ -5,20 +5,19 @@
  */
 //% weight=100 color=#00A654 icon="\uf085" block="PLEN:bit"
 namespace plenbit {
-
-    export enum LED_LR {
+    export enum LedLr {
         //% block="A button side"
-        A_button_side = 8,
+        AButtonSide = 8,
         //% block="B button side"
-        B_button_side = 16
+        BButtonSide = 16
     }
-    export enum LED_onoff {
-        //% block="ON"
-        ON = 0,
-        //% block="OFF"
-        OFF = 1
+    export enum LedOnOff {
+        //% block="on"
+        On = 0,
+        //% block="off"
+        Off = 1
     }
-    export enum stdMotions {
+    export enum StdMotions {
         //% block="Walk Forward"
         WalkForward = 0x46,
         //% block="Walk Left Turn"
@@ -28,13 +27,13 @@ namespace plenbit {
         //% block="Walk Back"
         WalkBack = 0x49,
         //% block="Left step"
-        Lstep = 0x00,
+        LStep = 0x00,
         //% block="Forward step"
-        Fstep = 0x01,
-        //% block="Right tep"
-        Rstep = 0x02,
+        FStep = 0x01,
+        //% block="Right step"
+        RStep = 0x02,
         //% block="A hem"
-        A_hem = 0x03,
+        AHem = 0x03,
         //% block="Bow"
         Bow = 0x04,
         //% block="Propose"
@@ -43,14 +42,14 @@ namespace plenbit {
         Hug = 0x06,
         //% block="Clap"
         Clap = 0x07,
-        //% block="High five"
-        Highfive = 0x08,
+        //% block="Highfive"
+        HighFive = 0x08,
         //% block="Arm PataPata"
         ArmPataPata = 0x29
     }
 
-    export enum boxMotions {
-        Shake_a_Box = 0x0a,
+    export enum BoxMotions {
+        ShakeABox = 0x0a,
         PickUpHigh = 0x0b,
         PickUpLow = 0x0c,
         ReceiveaBox = 0x0d,
@@ -60,7 +59,7 @@ namespace plenbit {
         PutDownHigh = 0x11,
         PutDownLow = 0x12
     }
-    export enum socMotions {
+    export enum SocMotions {
         //% block="Defense Left Step"
         DefenseLStep = 0x14,
         //% block="Dribble"
@@ -80,7 +79,7 @@ namespace plenbit {
         //% block="Pass To Right"
         PassToRight = 0x1c
     }
-    export enum danceMotions {
+    export enum DanceMotions {
         //% block="Dance Left Step"
         DanceLStep = 0x1e,
         //% block="Dance Forward Step"
@@ -100,17 +99,17 @@ namespace plenbit {
         //% block="Twist Dance"
         TwistDance = 0x26
     }
-    enum moveMotions {
+    enum MoveMotions {
 
     }
 
-    let Motion_Speed = 15;
-    let SERVO_NUM = 0x08;
-    let SERVO_SET_INIT = [1000, 630, 300, 600, 240, 600, 1000, 720];
-    let SERVO_ANGLE = [1000, 630, 300, 600, 240, 600, 1000, 720];
-    let romADR1 = 0x56;
-    let init_BLE = false;
-    let init_PCA9865 = false;
+    let motionSpeed = 15;
+    let servoNum = 0x08;
+    let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
+    let servoAngle = [1000, 630, 300, 600, 240, 600, 1000, 720];
+    let romAdr1 = 0x56;
+    let initBle = false;
+    let initPCA9865 = false;
 
     export function secretIncantation() {
         write8(0xFE, 0x85);//PRE_SCALE
@@ -122,8 +121,8 @@ namespace plenbit {
     }
 
     //% blockId=PLEN:bit_Sensor
-    //% block="Read Sensor %num"
-    export function sensorLR(num: LED_LR) {
+    //% block="read sensor %num"
+    export function sensorLR(num: LedLr) {
         let neko = 0;
         if (num == 16) {
             neko = AnalogPin.P2;
@@ -139,25 +138,25 @@ namespace plenbit {
     }
 
     //% blockId=PLEN:bit_servo
-    //% block="ServoMotor %num|Number %degrees|degrees"
+    //% block="servo motor %num|number %degrees|degrees"
     //% num.min=0 num.max=11
     //% degrees.min=0 degrees.max=180
     export function servoWrite(num: number, degrees: number) {
-        if (init_PCA9865 == false) {
+        if (initPCA9865 == false) {
             secretIncantation();
-            init_PCA9865 = true;
+            initPCA9865 = true;
         }
-        let HighByte = false;
-        let PWMVal = degrees * 100 * 226 / 10000;
-        PWMVal = Math.round(PWMVal) + 0x66;
-        if (PWMVal > 0xFF) {
-            HighByte = true;
+        let highByte = false;
+        let pwmVal = degrees * 100 * 226 / 10000;
+        pwmVal = Math.round(pwmVal) + 0x66;
+        if (pwmVal > 0xFF) {
+            highByte = true;
         }
-        write8(SERVO_NUM + num * 4, PWMVal);
-        if (HighByte) {
-            write8(SERVO_NUM + num * 4 + 1, 0x01);
+        write8(servoNum + num * 4, pwmVal);
+        if (highByte) {
+            write8(servoNum + num * 4 + 1, 0x01);
         } else {
-            write8(SERVO_NUM + num * 4 + 1, 0x00);
+            write8(servoNum + num * 4 + 1, 0x00);
         }
     }
 
@@ -169,118 +168,115 @@ namespace plenbit {
     }
 
     //% blockId=PLEN:bit_motion_std
-    //% block="Play std_Motion %filename"
-    export function std_motion(filename: stdMotions) {
-        motion(filename);
+    //% block="play std motion %fileName"
+    export function stdMotion(fileName: StdMotions) {
+        motion(fileName);
     }
     //% blockId=PLEN:bit_motion_Soc
-    //% block="Play Soccer_motion %filename"
-    export function soccer_motion(filename: socMotions) {
-        motion(filename);
+    //% block="play soccer motion %fileName"
+    export function soccerMotion(fileName: SocMotions) {
+        motion(fileName);
     }
 
     // blockId=PLEN:bit_motion_box
-    // block="Play Box_Motion %filename"
-    export function box_motion(filename: boxMotions) {
-        motion(filename);
+    // block="play box motion %fileName"
+    export function boxMotion(fileName: BoxMotions) {
+        motion(fileName);
     }
 
     //% blockId=PLEN:bit_motion_dan
-    //% block="Play Dance_Motion %filename"
-    export function dance_motion(filename: danceMotions) {
-        motion(filename);
+    //% block="play dance motion %fileName"
+    export function danceMotion(fileName: DanceMotions) {
+        motion(fileName);
     }
 
     // blockId=PLEN:bit_motion_m
-    // block="Play Move_Motion %filename"
-    export function Move_motion(filename: moveMotions) {
-        motion(filename);
+    // block="play move motion %fileName"
+    export function moveMotion(fileName: MoveMotions) {
+        motion(fileName);
     }
 
     //% blockId=PLEN:bit_motion
-    //% block="Play Motion Number %filename"
-    //% filename.min=0 filename.max=73
-    export function motion(filename: number) {
+    //% block="play motion number %fileName"
+    //% fileName.min=0 fileName.max=73
+    export function motion(fileName: number) {
         let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         let command = ">";//0x3e
-        let list_len = 43;
-        let _read_adr = 0x32 + 860 * filename;
-        //serial.writeNumber(filename)
-        //serial.writeString(",filename")
-        //serial.writeNumber(_read_adr)
+        let listLen = 43;
+        let readAdr = 0x32 + 860 * fileName;
+        //serial.writeNumber(fileName)
+        //serial.writeString(",fileName")
+        //serial.writeNumber(readAdr)
         //serial.writeString(",adr")
-
-
         let error = 0;
-
         while (1) {
             if (error == 1) {
                 break
             }
 
-            let mbuf = reep(_read_adr, list_len);
-            _read_adr += list_len;
-            if (mbuf[0] == 0xff) {
+            let mBuf = reep(readAdr, listLen);
+            readAdr += listLen;
+            if (mBuf[0] == 0xff) {
                 break
             }
 
             let mf = "";    //=null ?
-            for (let i = 0; i < list_len; i++) {
-                let num_ = mbuf.getNumber(NumberFormat.Int8LE, i);
-                mf += numtohex(num_);
+            for (let i = 0; i < listLen; i++) {
+                let num = mBuf.getNumber(NumberFormat.Int8LE, i);
+                mf += numToHex(num);
             }
             //serial.writeString(",Nonull")
-            let _ls_n = 0;   // list_num
-            while (list_len > _ls_n) {
-                if (command != mf[_ls_n]) {
-                    _ls_n += 1;
+            let listNum = 0;
+            while (listLen > listNum) {
+                if (command != mf[listNum]) {
+                    listNum += 1;
                     continue
                 } //serial.writeString(",>OK")
-                _ls_n += 1; // >
-                //serial.writeString(mf[_ls_n]);
-                //serial.writeString(mf[_ls_n] + 1);
-                if ("mf" != (mf[_ls_n] + mf[_ls_n + 1])) {
-                    //if (0x4d != (mf[_ls_n])) {
-                    _ls_n += 2;
+                listNum += 1; // >
+                //serial.writeString(mf[listNum]);
+                //serial.writeString(mf[listNum] + 1);
+                if ("mf" != (mf[listNum] + mf[listNum + 1])) {
+                    //if (0x4d != (mf[listNum])) {
+                    listNum += 2;
                     continue
                 } //serial.writeString(",mfOK")
-                _ls_n += 2; // MF
+                listNum += 2; // MF
 
-                //if (filename != int((_mf[_ls_n] + _mf[_ls_n + 1]), 16)) {
-                if (filename != parseInt_m(mf[_ls_n] + mf[_ls_n + 1])) {
+                //if (fileName != int((_mf[listNum] + _mf[listNum + 1]), 16)) {
+                if (fileName != parseIntM(mf[listNum] + mf[listNum + 1])) {
                     error = 1;
                     break
                 }
                 //serial.writeString(",fileOK")
-                _ls_n += 4;// slot,flame
+                listNum += 4;// slot,flame
 
-                let times = (mf[_ls_n] + mf[_ls_n + 1] + mf[_ls_n + 2] + mf[_ls_n + 3])
-                let time = (parseInt_m(times));
-                _ls_n += 4;
+                let times = (mf[listNum] + mf[listNum + 1] + mf[listNum + 2] + mf[listNum + 3])
+                let time = (parseIntM(times));
+                listNum += 4;
                 let val = 0;
                 while (1) {
-                    if ((list_len < (_ls_n + 4)) || (command == mf[_ls_n]) || (24 < val)) {
+                    if ((listLen < (listNum + 4)) || (command == mf[listNum]) || (24 < val)) {
                         setAngle(data, time);
                         break
                     }
-                    let num = (mf[_ls_n] + mf[_ls_n + 1] + mf[_ls_n + 2] + mf[_ls_n + 3]);
-                    let num_h = (parseInt_m(num));
-                    if (num_h >= 0x7fff) {
-                        num_h = num_h - 0x10000;
+                    let num = (mf[listNum] + mf[listNum + 1] + mf[listNum + 2] + mf[listNum + 3]);
+                    let numHex = (parseIntM(num));
+                    if (numHex >= 0x7fff) {
+                        numHex = numHex - 0x10000;
                     } else {
-                        num_h = num_h & 0xffff;
+                        numHex = numHex & 0xffff;
                     }
-                    data[val] = num_h;
+                    data[val] = numHex;
                     //serial.writeNumber(data[val]);
                     //serial.writeString(",")
                     val = val + 1;
-                    _ls_n += 4;
+                    listNum += 4;
                 }
             }
         }
     }
 
-    function hextoint(num: number) {
+    function hexToInt(num: number) {
         let i = 0;
         if (48 <= num && num <= 57) {
             i = num - 48;
@@ -292,7 +288,7 @@ namespace plenbit {
         return i;
     }
 
-    function numtohex(num: number) {
+    function numToHex(num: number) {
         let i = "";
         if (48 <= num && num <= 57) {
             i = (num - 48).toString();
@@ -356,7 +352,7 @@ namespace plenbit {
         return i;
     }
 
-    export function parseInt_m(str: string) {
+    export function parseIntM(str: string) {
         let len = str.length;
         let num = [0, 0, 0, 0];
         for (let i = 0; i < len; i++) {
@@ -417,70 +413,70 @@ namespace plenbit {
         return hex;
     }
 
-    export function bufTostr(mbuf: Buffer) {
+    export function bufToStr(mBuf: Buffer) {
         let mf = "";    //=null ?
-        for (let i = 0; i < mbuf.length; i++) {
-            let num_ = mbuf.getNumber(NumberFormat.Int8LE, i);
-            mf += numtohex(num_);
+        for (let i = 0; i < mBuf.length; i++) {
+            let num = mBuf.getNumber(NumberFormat.Int8LE, i);
+            mf += numToHex(num);
         }
         return mf;
     }
 
     export function setAngle(angle: number[], msec: number) {
-        let _step = [0, 0, 0, 0, 0, 0, 0, 0];
-        let _msec = msec / Motion_Speed;//now 15//default 10; //speedy 20   Speed Adj
-        for (let _val = 0; _val < 8; _val++) {
-            let _target = (SERVO_SET_INIT[_val] - angle[_val]);
-            if (_target != SERVO_ANGLE[_val]) {  // Target != Present
-                _step[_val] = (_target - SERVO_ANGLE[_val]) / (_msec);
+        let step = [0, 0, 0, 0, 0, 0, 0, 0];
+        msec = msec / motionSpeed;//now 15//default 10; //speedy 20   Speed Adj
+        for (let val = 0; val < 8; val++) {
+            let target = (servoSetInit[val] - angle[val]);
+            if (target != servoAngle[val]) {  // Target != Present
+                step[val] = (target - servoAngle[val]) / (msec);
             }
         }
-        for (let i = 0; i <= _msec; i++) {
-            for (let _val = 0; _val < 8; _val++) {
-                SERVO_ANGLE[_val] += _step[_val];
-                servoWrite(_val, (SERVO_ANGLE[_val] / 10));
+        for (let i = 0; i <= msec; i++) {
+            for (let val = 0; val < 8; val++) {
+                servoAngle[val] += step[val];
+                servoWrite(val, (servoAngle[val] / 10));
             }
             //basic.pause(1); //Nakutei yoi
         }
     }
 
     // blockId=PLEN:bit_reep
-    // block="ReadEEPROM %eepAdr| byte%num"
+    // block="readEEPROM %eepAdr| byte%num"
     // eepAdr.min=910 eepAdr.max=2000
     // num.min=0 num.max=43
     export function reep(eepAdr: number, num: number) {
-        let _data = pins.createBuffer(2);
-        _data[0] = eepAdr >> 8;
-        _data[1] = eepAdr & 0xFF;
+        let data = pins.createBuffer(2);
+        data[0] = eepAdr >> 8;
+        data[1] = eepAdr & 0xFF;
         // need adr change code
-        pins.i2cWriteBuffer(romADR1, _data)
-        let value = (pins.i2cReadBuffer(romADR1, num, false));
+        pins.i2cWriteBuffer(romAdr1, data)
+        let value = (pins.i2cReadBuffer(romAdr1, num, false));
         return value
     }
 
-    function BLE_init() {
+    function bleInit() {
         serial.redirect(SerialPin.P8, SerialPin.P12, 115200);
         pins.digitalWritePin(DigitalPin.P16, 0);
-        init_BLE = true;
+        initBle = true;
     }
 
     //% blockId=PLEN:bit_BLE
-    //% block="Enable control from smartphone"
-    export function serialread() {
-        if (init_BLE == false) BLE_init();
+    //% block="enable control from smartphone"
+    export function serialRead() {
+        if (initBle == false) bleInit();
         pins.digitalWritePin(DigitalPin.P16, 1);
         while (1) {
             let buf = serial.readString();
             if ((buf[0] != "$") && (buf[0] != "#")) {
                 break
             }
-            let _buf = buf[1] + buf[2];
-            if (_buf == "PM") {
-                _buf = buf[3] + buf[4];
-                //basic.showString(_buf);
-                motion(parseInt_m(_buf));
+            let bufB = buf[1] + buf[2];
+            if (bufB == "PM") {
+                bufB = buf[3] + buf[4];
+                //basic.showString(bufB);
+                motion(parseIntM(bufB));
                 break
-            } else if (_buf == "SM") {
+            } else if (bufB == "SM") {
                 break
             } else {
                 //display.show("b")
@@ -491,27 +487,25 @@ namespace plenbit {
     }
 
 
-
-
-    //% block="ServoMotor_initial"
-    export function servo_initial_set() {
-        //setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1);//Motion_Speed//num=1000
-        let s_num = 0;
-        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
-        s_num++;
-        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
-        s_num++;
-        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
-        s_num++;
-        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
-        s_num++;
-        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
-        s_num++;
-        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
-        s_num++;
-        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
-        s_num++;
-        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
+    //% block="servo motor initial"
+    export function servoInitialSet() {
+        //setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1);//motionSpeed//num=1000
+        let sNum = 0;
+        servoWrite(sNum, servoSetInit[sNum] / 10);
+        sNum++;
+        servoWrite(sNum, servoSetInit[sNum] / 10);
+        sNum++;
+        servoWrite(sNum, servoSetInit[sNum] / 10);
+        sNum++;
+        servoWrite(sNum, servoSetInit[sNum] / 10);
+        sNum++;
+        servoWrite(sNum, servoSetInit[sNum] / 10);
+        sNum++;
+        servoWrite(sNum, servoSetInit[sNum] / 10);
+        sNum++;
+        servoWrite(sNum, servoSetInit[sNum] / 10);
+        sNum++;
+        servoWrite(sNum, servoSetInit[sNum] / 10);
 
     }
     //% block
@@ -523,21 +517,17 @@ namespace plenbit {
         write8(0xFD, 0x00);
         write8(0x00, 0x01);
         //write8(0x00, 0x80);
-        init_PCA9865 == false
+        initPCA9865 == false
     }
 
-    /**
-     * This is test code.
-    **/
-    //% block="Eye LED is %onoff"
-    export function eyeLed(led_onoff: LED_onoff) {
+    //% block="eye led is %onoff"
+    export function eyeLed(ledOnOff: LedOnOff) {
         //if (led_lr == 8) {
-        pins.digitalWritePin(DigitalPin.P8, led_onoff);
+        pins.digitalWritePin(DigitalPin.P8, ledOnOff);
         //}
         //if (led_lr == 16) {
-        pins.digitalWritePin(DigitalPin.P16, led_onoff);
+        pins.digitalWritePin(DigitalPin.P16, ledOnOff);
         //23 or 15
         //}
     }
-
 }
