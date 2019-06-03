@@ -105,7 +105,8 @@ namespace plenbit {
 
     let motionSpeed = 15;
     let servoNum = 0x08;
-    let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
+    						//[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
+    export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let servoAngle = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let romAdr1 = 0x56;
     let initBle = false;
@@ -199,6 +200,7 @@ namespace plenbit {
     //% blockId=PLEN:bit_motion
     //% block="play motion number %fileName"
     //% fileName.min=0 fileName.max=73
+    //% advanced=true
     export function motion(fileName: number) {
         let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         let command = ">";//0x3e
@@ -276,6 +278,25 @@ namespace plenbit {
         }
     }
 
+
+    export function setAngle(angle: number[], msec: number) {
+        let step = [0, 0, 0, 0, 0, 0, 0, 0];
+        msec = msec / motionSpeed;//now 15//default 10; //speedy 20   Speed Adj
+        for (let val = 0; val < 8; val++) {
+            let target = (servoSetInit[val] - angle[val]);
+            if (target != servoAngle[val]) {  // Target != Present
+                step[val] = (target - servoAngle[val]) / (msec);
+            }
+        }
+        for (let i = 0; i <= msec; i++) {
+            for (let val = 0; val < 8; val++) {
+                servoAngle[val] += step[val];
+                servoWrite(val, (servoAngle[val] / 10));
+            }
+            //basic.pause(1); //Nakutei yoi
+        }
+    }
+
     function hexToInt(num: number) {
         let i = 0;
         if (48 <= num && num <= 57) {
@@ -320,7 +341,6 @@ namespace plenbit {
                     break;
                 default:
                     i = "";
-
             }
         } else if (97 <= num && num <= 102) {
             switch (num) {
@@ -348,7 +368,9 @@ namespace plenbit {
                 default:
                     i = "";
             }
-        }
+        } else {
+	        //i = "m" + num.toString();
+	    }
         return i;
     }
 
@@ -413,6 +435,17 @@ namespace plenbit {
         return hex;
     }
 
+	export function toString16(dec: number) {
+	    let val = [0, 0, 0, 0];
+	    let listHex = "";
+	    listHex = "0123456789ABCDEF";
+	    val[4] = Math.idiv(dec, 0x1000);
+	    val[3] = Math.idiv(dec - val[4] * 0x1000, 0x100);
+	    val[2] = Math.idiv(dec - val[4] * 0x1000 - val[3] * 0x100, 0x10);
+	    val[1] = dec - val[4] * 0x1000 - val[3] * 0x100 - val[2] * 0x10;
+	    return ("" + listHex.charAt(val[4]) + listHex.charAt(val[3]) + listHex.charAt(val[2]) + listHex.charAt(val[1]));
+	}
+
     export function bufToStr(mBuf: Buffer) {
         let mf = "";    //=null ?
         for (let i = 0; i < mBuf.length; i++) {
@@ -422,28 +455,23 @@ namespace plenbit {
         return mf;
     }
 
-    export function setAngle(angle: number[], msec: number) {
-        let step = [0, 0, 0, 0, 0, 0, 0, 0];
-        msec = msec / motionSpeed;//now 15//default 10; //speedy 20   Speed Adj
-        for (let val = 0; val < 8; val++) {
-            let target = (servoSetInit[val] - angle[val]);
-            if (target != servoAngle[val]) {  // Target != Present
-                step[val] = (target - servoAngle[val]) / (msec);
-            }
-        }
-        for (let i = 0; i <= msec; i++) {
-            for (let val = 0; val < 8; val++) {
-                servoAngle[val] += step[val];
-                servoWrite(val, (servoAngle[val] / 10));
-            }
-            //basic.pause(1); //Nakutei yoi
-        }
-    }
+
+
+	function weep(eepAdr: number, num: number) {
+	    let data = pins.createBuffer(3);
+	    data[0] = eepAdr >> 8;
+	    data[1] = eepAdr & 0xFF;
+	    data[2] = num;
+	    pins.i2cWriteBuffer(romAdr1, data)
+	    basic.pause(10)
+	    return 0
+	}
 
     // blockId=PLEN:bit_reep
     // block="readEEPROM %eepAdr| byte%num"
     // eepAdr.min=910 eepAdr.max=2000
     // num.min=0 num.max=43
+    // advanced=true
     export function reep(eepAdr: number, num: number) {
         let data = pins.createBuffer(2);
         data[0] = eepAdr >> 8;
@@ -454,6 +482,54 @@ namespace plenbit {
         return value
     }
 
+    //% block
+    //% advanced=true
+	export function savePositon(servoNum: number, adjustNum: number) {
+	    let adjStr = "";
+	    let adjStrTop = 0;
+	    let adjStrDown = 0;
+
+	    adjStr = toString16(servoSetInit[servoNum] + adjustNum);//1000->03e8
+
+	    if (3 == adjStr.length) {
+	        adjStr = 0 + adjStr;
+	    }
+	    adjStrTop = parseIntM(adjStr[0] + adjStr[1]); //03->3
+	    adjStrDown = parseIntM(adjStr[2] + adjStr[3]); //e8->232
+
+	    weep(servoNum * 2 + 2, adjStrTop);
+	    weep(servoNum * 2 + 3, adjStrDown);
+	    weep(0, 1);	//write flag
+	}
+
+	function readPos() {
+	    let readBuf = reep(0x00, 1);
+	    if (readBuf[0] == 0x01) {
+	        readBuf = reep(0x02, 16);
+	        for (let i = 0; i < 8; i++) {
+	            let strRom1 = toString16(readBuf[i * 2]);
+	            let strRom2 = toString16(readBuf[i * 2 + 1]);
+	            servoSetInit[i] = parseIntM(strRom1[2] + strRom1[3] + strRom2[2] + strRom2[3]);
+	            servoAngle[i] = parseIntM(strRom1[2] + strRom1[3] + strRom2[2] + strRom2[3]);
+	        }
+	    }
+	}
+
+    //% block
+    //% advanced=true
+    export function servoAdjust(servoNum: number, adjustNum: number) {
+        let adjNum = servoSetInit[servoNum] + adjustNum
+        if (100 > adjNum) {
+            adjustNum = adjustNum + 1;
+        } else if (adjNum > 1700) {
+            adjustNum = adjustNum - 1;
+        } else{
+            servoWrite(servoNum, (adjNum / 10));
+            basic.pause(0.5)
+        }
+        return adjustNum;
+    }
+
     function bleInit() {
         serial.redirect(SerialPin.P8, SerialPin.P12, 115200);
         pins.digitalWritePin(DigitalPin.P16, 0);
@@ -462,6 +538,7 @@ namespace plenbit {
 
     //% blockId=PLEN:bit_BLE
     //% block="enable control from smartphone"
+    //% advanced=true
     export function serialRead() {
         if (initBle == false) bleInit();
         pins.digitalWritePin(DigitalPin.P16, 1);
@@ -490,6 +567,7 @@ namespace plenbit {
     //% block="servo motor initial"
     export function servoInitialSet() {
         //setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1);//motionSpeed//num=1000
+        readPos();
         let sNum = 0;
         servoWrite(sNum, servoSetInit[sNum] / 10);
         sNum++;
@@ -506,9 +584,10 @@ namespace plenbit {
         servoWrite(sNum, servoSetInit[sNum] / 10);
         sNum++;
         servoWrite(sNum, servoSetInit[sNum] / 10);
-
     }
+
     //% block
+    //% advanced=true
     export function servoFree() {
         //Power Free!
         write8(0xFA, 0x00);
@@ -522,12 +601,7 @@ namespace plenbit {
 
     //% block="eye led is %onoff"
     export function eyeLed(ledOnOff: LedOnOff) {
-        //if (led_lr == 8) {
         pins.digitalWritePin(DigitalPin.P8, ledOnOff);
-        //}
-        //if (led_lr == 16) {
         pins.digitalWritePin(DigitalPin.P16, ledOnOff);
-        //23 or 15
-        //}
     }
 }
