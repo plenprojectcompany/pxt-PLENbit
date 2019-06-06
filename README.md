@@ -19,7 +19,7 @@ input.onButtonPressed(Button.A, function () {
 })
 ```
 
-## Othor guides
+## Other guides
 
 Programming guide here
 https://plen.jp/wp/plenbit/
