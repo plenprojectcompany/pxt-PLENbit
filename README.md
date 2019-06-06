@@ -13,10 +13,17 @@ https://plen.jp/wp/plenbit-assembly-kit/
 
 ```blocks
 //Play WalkForward motion when button A pressed
+//There are many other motions.
 input.onButtonPressed(Button.A, function () {
     plenbit.std_motion(plenbit.stdMotions.WalkForward)
 })
 ```
+
+## Othor guides
+
+Programming guide here
+https://plen.jp/wp/plenbit/
+
 ## License
 
 MIT
