@@ -105,12 +105,13 @@ namespace plenbit {
 
     let motionSpeed = 15;
     let servoNum = 0x08;
-    						//[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
+    //[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
     export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let servoAngle = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let romAdr1 = 0x56;
     let initBle = false;
     let initPCA9865 = false;
+    loadPos();
 
     export function secretIncantation() {
         write8(0xFE, 0x85);//PRE_SCALE
@@ -213,13 +214,13 @@ namespace plenbit {
         let error = 0;
         while (1) {
             if (error == 1) {
-                break
+                break;
             }
 
             let mBuf = reep(readAdr, listLen);
             readAdr += listLen;
             if (mBuf[0] == 0xff) {
-                break
+                break;
             }
 
             let mf = "";    //=null ?
@@ -232,7 +233,7 @@ namespace plenbit {
             while (listLen > listNum) {
                 if (command != mf[listNum]) {
                     listNum += 1;
-                    continue
+                    continue;
                 } //serial.writeString(",>OK")
                 listNum += 1; // >
                 //serial.writeString(mf[listNum]);
@@ -240,14 +241,14 @@ namespace plenbit {
                 if ("mf" != (mf[listNum] + mf[listNum + 1])) {
                     //if (0x4d != (mf[listNum])) {
                     listNum += 2;
-                    continue
+                    continue;
                 } //serial.writeString(",mfOK")
                 listNum += 2; // MF
 
                 //if (fileName != int((_mf[listNum] + _mf[listNum + 1]), 16)) {
                 if (fileName != parseIntM(mf[listNum] + mf[listNum + 1])) {
                     error = 1;
-                    break
+                    break;
                 }
                 //serial.writeString(",fileOK")
                 listNum += 4;// slot,flame
@@ -259,7 +260,7 @@ namespace plenbit {
                 while (1) {
                     if ((listLen < (listNum + 4)) || (command == mf[listNum]) || (24 < val)) {
                         setAngle(data, time);
-                        break
+                        break;
                     }
                     let num = (mf[listNum] + mf[listNum + 1] + mf[listNum + 2] + mf[listNum + 3]);
                     let numHex = (parseIntM(num));
@@ -369,8 +370,8 @@ namespace plenbit {
                     i = "";
             }
         } else {
-	        //i = "m" + num.toString();
-	    }
+            //i = "m" + num.toString();
+        }
         return i;
     }
 
@@ -431,20 +432,19 @@ namespace plenbit {
             case 1:
                 hex += (num[len - 1] * 0x0001);
         }
-        //let hex = (num[0] * 0x1000) + (num[1] * 0x0100) + (num[2] * 0x0010) + (num[3] * 0x0001);
         return hex;
     }
 
-	export function toString16(dec: number) {
-	    let val = [0, 0, 0, 0];
-	    let listHex = "";
-	    listHex = "0123456789ABCDEF";
-	    val[4] = Math.idiv(dec, 0x1000);
-	    val[3] = Math.idiv(dec - val[4] * 0x1000, 0x100);
-	    val[2] = Math.idiv(dec - val[4] * 0x1000 - val[3] * 0x100, 0x10);
-	    val[1] = dec - val[4] * 0x1000 - val[3] * 0x100 - val[2] * 0x10;
-	    return ("" + listHex.charAt(val[4]) + listHex.charAt(val[3]) + listHex.charAt(val[2]) + listHex.charAt(val[1]));
-	}
+    export function toString16(dec: number) {
+        let val = [0, 0, 0, 0];
+        let listHex = "";
+        listHex = "0123456789ABCDEF";
+        val[4] = Math.idiv(dec, 0x1000);
+        val[3] = Math.idiv(dec - val[4] * 0x1000, 0x100);
+        val[2] = Math.idiv(dec - val[4] * 0x1000 - val[3] * 0x100, 0x10);
+        val[1] = dec - val[4] * 0x1000 - val[3] * 0x100 - val[2] * 0x10;
+        return ("" + listHex.charAt(val[4]) + listHex.charAt(val[3]) + listHex.charAt(val[2]) + listHex.charAt(val[1]));
+    }
 
     export function bufToStr(mBuf: Buffer) {
         let mf = "";    //=null ?
@@ -455,17 +455,15 @@ namespace plenbit {
         return mf;
     }
 
-
-
-	function weep(eepAdr: number, num: number) {
-	    let data = pins.createBuffer(3);
-	    data[0] = eepAdr >> 8;
-	    data[1] = eepAdr & 0xFF;
-	    data[2] = num;
-	    pins.i2cWriteBuffer(romAdr1, data)
-	    basic.pause(10)
-	    return 0
-	}
+    function weep(eepAdr: number, num: number) {
+        let data = pins.createBuffer(3);
+        data[0] = eepAdr >> 8;
+        data[1] = eepAdr & 0xFF;
+        data[2] = num;
+        pins.i2cWriteBuffer(romAdr1, data);
+        basic.pause(10);
+        return 0;
+    }
 
     // blockId=PLEN:bit_reep
     // block="readEEPROM %eepAdr| byte%num"
@@ -477,43 +475,43 @@ namespace plenbit {
         data[0] = eepAdr >> 8;
         data[1] = eepAdr & 0xFF;
         // need adr change code
-        pins.i2cWriteBuffer(romAdr1, data)
+        pins.i2cWriteBuffer(romAdr1, data);
         let value = (pins.i2cReadBuffer(romAdr1, num, false));
-        return value
+        return value;
     }
 
     //% block
     //% advanced=true
-	export function savePositon(servoNum: number, adjustNum: number) {
-	    let adjStr = "";
-	    let adjStrTop = 0;
-	    let adjStrDown = 0;
+    export function savePositon(servoNum: number, adjustNum: number) {
+        let adjStr = "";
+        let adjStrTop = 0;
+        let adjStrDown = 0;
 
-	    adjStr = toString16(servoSetInit[servoNum] + adjustNum);//1000->03e8
+        adjStr = toString16(servoSetInit[servoNum] + adjustNum);//1000->03e8
 
-	    if (3 == adjStr.length) {
-	        adjStr = 0 + adjStr;
-	    }
-	    adjStrTop = parseIntM(adjStr[0] + adjStr[1]); //03->3
-	    adjStrDown = parseIntM(adjStr[2] + adjStr[3]); //e8->232
+        if (3 == adjStr.length) {
+            adjStr = 0 + adjStr;
+        }
+        adjStrTop = parseIntM(adjStr[0] + adjStr[1]); //03->3
+        adjStrDown = parseIntM(adjStr[2] + adjStr[3]); //e8->232
 
-	    weep(servoNum * 2 + 2, adjStrTop);
-	    weep(servoNum * 2 + 3, adjStrDown);
-	    weep(0, 1);	//write flag
-	}
+        weep(servoNum * 2 + 2, adjStrTop);
+        weep(servoNum * 2 + 3, adjStrDown);
+        weep(0, 1);	//write flag
+    }
 
-	function readPos() {
-	    let readBuf = reep(0x00, 1);
-	    if (readBuf[0] == 0x01) {
-	        readBuf = reep(0x02, 16);
-	        for (let i = 0; i < 8; i++) {
-	            let strRom1 = toString16(readBuf[i * 2]);
-	            let strRom2 = toString16(readBuf[i * 2 + 1]);
-	            servoSetInit[i] = parseIntM(strRom1[2] + strRom1[3] + strRom2[2] + strRom2[3]);
-	            servoAngle[i] = parseIntM(strRom1[2] + strRom1[3] + strRom2[2] + strRom2[3]);
-	        }
-	    }
-	}
+    function loadPos() {
+        let readBuf = reep(0x00, 1);
+        if (readBuf[0] == 0x01) {
+            readBuf = reep(0x02, 16);
+            for (let i = 0; i < 8; i++) {
+                let strRom1 = toString16(readBuf[i * 2]);
+                let strRom2 = toString16(readBuf[i * 2 + 1]);
+                servoSetInit[i] = parseIntM(strRom1[2] + strRom1[3] + strRom2[2] + strRom2[3]);
+                servoAngle[i] = parseIntM(strRom1[2] + strRom1[3] + strRom2[2] + strRom2[3]);
+            }
+        }
+    }
 
     //% block
     //% advanced=true
@@ -523,9 +521,9 @@ namespace plenbit {
             adjustNum = adjustNum + 1;
         } else if (adjNum > 1700) {
             adjustNum = adjustNum - 1;
-        } else{
+        } else {
             servoWrite(servoNum, (adjNum / 10));
-            basic.pause(0.5)
+            basic.pause(0.5);
         }
         return adjustNum;
     }
@@ -545,45 +543,29 @@ namespace plenbit {
         while (1) {
             let buf = serial.readString();
             if ((buf[0] != "$") && (buf[0] != "#")) {
-                break
+                break;
             }
             let bufB = buf[1] + buf[2];
             if (bufB == "PM") {
                 bufB = buf[3] + buf[4];
                 //basic.showString(bufB);
                 motion(parseIntM(bufB));
-                break
+                break;
             } else if (bufB == "SM") {
-                break
+                break;
             } else {
                 //display.show("b")
-                break
+                break;
             }
         }
         pins.digitalWritePin(DigitalPin.P16, 0);
     }
 
-
     //% block="servo motor initial"
     export function servoInitialSet() {
-        //setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1);//motionSpeed//num=1000
-        readPos();
-        let sNum = 0;
-        servoWrite(sNum, servoSetInit[sNum] / 10);
-        sNum++;
-        servoWrite(sNum, servoSetInit[sNum] / 10);
-        sNum++;
-        servoWrite(sNum, servoSetInit[sNum] / 10);
-        sNum++;
-        servoWrite(sNum, servoSetInit[sNum] / 10);
-        sNum++;
-        servoWrite(sNum, servoSetInit[sNum] / 10);
-        sNum++;
-        servoWrite(sNum, servoSetInit[sNum] / 10);
-        sNum++;
-        servoWrite(sNum, servoSetInit[sNum] / 10);
-        sNum++;
-        servoWrite(sNum, servoSetInit[sNum] / 10);
+        for (let n = 0; n < 8; n++) {
+            servoWrite(n, servoSetInit[n] / 10);
+        }
     }
 
     //% block
@@ -596,7 +578,7 @@ namespace plenbit {
         write8(0xFD, 0x00);
         write8(0x00, 0x01);
         //write8(0x00, 0x80);
-        initPCA9865 == false
+        initPCA9865 == false;
     }
 
     //% block="eye led is %onoff"
