@@ -296,6 +296,10 @@ namespace plenbit {
             }
             //basic.pause(1); //Nakutei yoi
         }
+        //for (let val = 0; val < 8; val++) {
+        //    servoAngle[val] = angle[val];
+        //    servoWrite(val, (servoAngle[val] / 10));
+        //}
     }
 
     function hexToInt(num: number) {
