@@ -1,7 +1,5 @@
 # pxt-plenbit-blocks
 
-
-
 ## PLEN:bit
 
 PLEN:bit is a small humanoid robot with movable arms and legs. Anyone can easily use PLEN:bit through programing and onboard sensors.
@@ -31,3 +29,6 @@ MIT
 ## Supported targets
 
 * for PXT/microbit
+```package
+plenbit=github:plenprojectcompany/pxt-PLENbit
+```

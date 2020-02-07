@@ -4,7 +4,6 @@ yotta_modules
 yotta_targets
 pxt_modules
 package-lock.json
+.travis.yml
 *.db
 *.tgz
-package-lock.json
-.travis.yml
