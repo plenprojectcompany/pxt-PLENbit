@@ -1,9 +1,10 @@
 {
     "name": "pxt-plenbit",
-    "version": "0.0.12",
+    "version": "0.0.8",
     "description": "",
     "dependencies": {
-        "core": "*"
+        "core": "*",
+        "radio": "*"
     },
     "files": [
         "README.md",
@@ -15,7 +16,7 @@
     "testFiles": [
         "test.ts"
     ],
-    "public": true,
+    "public": false,
     "yotta": {
         "config": {}
     },

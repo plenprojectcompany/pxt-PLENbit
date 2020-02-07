@@ -112,7 +112,6 @@ namespace plenbit {
     let initBle = false;
     let initPCA9865 = false;
     loadPos();
-    eyeLed(LedOnOff.On);
 
     export function secretIncantation() {
         write8(0xFE, 0x85);//PRE_SCALE
@@ -297,10 +296,6 @@ namespace plenbit {
             }
             //basic.pause(1); //Nakutei yoi
         }
-        //for (let val = 0; val < 8; val++) {
-        //    servoAngle[val] = angle[val];
-        //    servoWrite(val, (servoAngle[val] / 10));
-        //}
     }
 
     function hexToInt(num: number) {
@@ -321,26 +316,58 @@ namespace plenbit {
             i = (num - 48).toString();
         } else if (62 <= num && num <= 77) {
             switch (num) {
-                case 62: i = ">"; break;
-                case 65: i = "a"; break;
-                case 66: i = "b"; break;
-                case 67: i = "c"; break;
-                case 68: i = "d"; break;
-                case 69: i = "e"; break;
-                case 70: i = "f"; break;
-                case 77: i = "m"; break;
-                default: i = "";
+                case 62:
+                    i = ">";
+                    break;
+                case 65:
+                    i = "a";
+                    break;
+                case 66:
+                    i = "b";
+                    break;
+                case 67:
+                    i = "c";
+                    break;
+                case 68:
+                    i = "d";
+                    break;
+                case 69:
+                    i = "e";
+                    break;
+                case 70:
+                    i = "f";
+                    break;
+                case 77:
+                    i = "m";
+                    break;
+                default:
+                    i = "";
             }
         } else if (97 <= num && num <= 102) {
             switch (num) {
-                case 97: i = "a"; break;
-                case 98: i = "b"; break;
-                case 99: i = "c"; break;
-                case 100: i = "d"; break;
-                case 101: i = "e"; break;
-                case 102: i = "f"; break;
-                //case 109: i = "m"; break;
-                default: i = "";
+                case 97:
+                    i = "a";
+                    break;
+                case 98:
+                    i = "b";
+                    break;
+                case 99:
+                    i = "c";
+                    break;
+                case 100:
+                    i = "d";
+                    break;
+                case 101:
+                    i = "e";
+                    break;
+                case 102:
+                    i = "f";
+                    break;
+                //case 109:
+                //    i = "m";
+                //    break;
+                default:
+                    i = "";
             }
         } else {
             //i = "m" + num.toString();
@@ -353,18 +380,42 @@ namespace plenbit {
         let num = [0, 0, 0, 0];
         for (let i = 0; i < len; i++) {
             switch (str[i]) {
-                case "a": num[i] = 10; break;
-                case "b": num[i] = 11; break;
-                case "c": num[i] = 12; break;
-                case "d": num[i] = 13; break;
-                case "e": num[i] = 14; break;
-                case "f": num[i] = 15; break;
-                case "A": num[i] = 10; break;
-                case "B": num[i] = 11; break;
-                case "C": num[i] = 12; break;
-                case "D": num[i] = 13; break;
-                case "E": num[i] = 14; break;
-                case "F": num[i] = 15; break;
+                case "a":
+                    num[i] = 10;
+                    break;
+                case "b":
+                    num[i] = 11;
+                    break;
+                case "c":
+                    num[i] = 12;
+                    break;
+                case "d":
+                    num[i] = 13;
+                    break;
+                case "e":
+                    num[i] = 14;
+                    break;
+                case "f":
+                    num[i] = 15;
+                    break;
+                case "A":
+                    num[i] = 10;
+                    break;
+                case "B":
+                    num[i] = 11;
+                    break;
+                case "C":
+                    num[i] = 12;
+                    break;
+                case "D":
+                    num[i] = 13;
+                    break;
+                case "E":
+                    num[i] = 14;
+                    break;
+                case "F":
+                    num[i] = 15;
+                    break;
                 default:
                     num[i] = parseInt(str[i]);
                     break;
