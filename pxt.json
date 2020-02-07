@@ -3,8 +3,7 @@
     "version": "0.0.8",
     "description": "",
     "dependencies": {
-        "core": "*",
-        "radio": "*"
+        "core": "*"
     },
     "files": [
         "README.md",
@@ -16,7 +15,7 @@
     "testFiles": [
         "test.ts"
     ],
-    "public": false,
+    "public": true,
     "yotta": {
         "config": {}
     },
