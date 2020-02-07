@@ -6,3 +6,5 @@ pxt_modules
 package-lock.json
 *.db
 *.tgz
+package-lock.json
+.travis.yml

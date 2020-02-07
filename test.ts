@@ -10,7 +10,11 @@ basic.showLeds(`
     `);
 
 basic.forever(function () {
+<<<<<<< HEAD
     plenbit.serialRead()
+=======
+    //plenbit.serialRead()
+>>>>>>> 7f1c51392adf78d967bcffc289ce99d42cfc3a90
 
 })
 input.onButtonPressed(Button.A, function () {
