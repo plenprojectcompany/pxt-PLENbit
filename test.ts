@@ -10,12 +10,12 @@ basic.showLeds(`
     `);
 
 basic.forever(function () {
-    plenbit.serialread()
+    //plenbit.serialRead()
 
 })
 input.onButtonPressed(Button.A, function () {
     //plenbit.dance_motion(plenbit.danceMotions.DanceLStep)
-    plenbit.std_motion(plenbit.stdMotions.ArmPataPata)
+    plenbit.stdMotion(plenbit.StdMotions.ArmPataPata)
 
 })
 input.onButtonPressed(Button.B, function () {
