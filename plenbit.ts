@@ -446,7 +446,7 @@ namespace plenbit {
 
         weep(servoNum * 2 + 2, adjStrTop);
         weep(servoNum * 2 + 3, adjStrDown);
-        weep(0, 1);	//write flag
+        weep(0, 1);    //write flag
     }
 
     function loadPos() {

@@ -1,6 +1,6 @@
 {
     "name": "pxt-plenbit",
-    "version": "0.0.12",
+    "version": "0.0.14",
     "description": "",
     "dependencies": {
         "core": "*"
@@ -14,7 +14,7 @@
     "testFiles": [
         "test.ts"
     ],
-    "public": true,
+    "public": false,
     "yotta": {
         "config": {}
     }
