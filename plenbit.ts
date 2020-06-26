@@ -461,6 +461,29 @@ namespace plenbit {
             }
         }
     }
+    
+    //% block
+    //% advanced=true
+    export function resetPosition()
+    {
+        let adjStr = "";
+        let adjStrTop = 0;
+        let adjStrDown = 0;
+        for (let servoNum = 0; servoNum < 8; servoNum++)
+        {
+            adjStr = toString16(servoSetInit[servoNum]);//1000->03e8
+            if (3 == adjStr.length)
+            {
+                adjStr = 0 + adjStr;
+            }
+            adjStrTop = parseIntM(adjStr[0] + adjStr[1]); //03->3
+            adjStrDown = parseIntM(adjStr[2] + adjStr[3]); //e8->232
+
+            weep(servoNum * 2 + 2, adjStrTop);
+            weep(servoNum * 2 + 3, adjStrDown);
+        }
+        weep(0, 0);    //write flag reset
+    }
 
     //% block
     //% advanced=true
