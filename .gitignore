@@ -3,8 +3,10 @@ node_modules
 yotta_modules
 yotta_targets
 pxt_modules
+projects
 package-lock.json
 package.json
+myReadme.txt
 .travis.yml
 *.db
 *.tgz
