@@ -267,61 +267,58 @@ namespace plenbit {
         doMotion(fileName,0xff);
     }
 
-    //% block="play motion number %fileName number%flameNum"
-    //% fileName.min=0 fileName.max=73
-    //% flameNum.min=0 flameNum.max=20
-    //% advanced=true
-    export function motionFlame(fileName: number, flameNum: number) {
+    // block="play motion number %fileName number%flameNum"
+    // fileName.min=0 fileName.max=73
+    // flameNum.min=0 flameNum.max=20
+    // advanced=true
+    function motionFlame(fileName: number, flameNum: number) {
         doMotion(fileName,flameNum);
     }
     
     function doMotion(fileName: number, flameNum: number) {
-            let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            let command = 0x3e;//">"
-            let listLen = 43;
-            let loopBool = false;
-            let plenDebug :boolean = false;
-            if(flameNum == 0xff){
-                flameNum = 0;
-                loopBool = true;
-            }
-            let readAdr =  0x32 + 860 * fileName + flameNum * listLen;
-            let error = 0;
-            while (1) 
-            {
-                let mBuf = reep(readAdr, listLen);
-                readAdr += listLen;
-                if (mBuf[0] == 0xff) break;
-                let mf = "";    //=null ?
-                let listNum = 0;
-                if(command != mBuf[listNum])break;
-                if(plenDebug)serial.writeString(",>OK");
-                listNum += 1; // >
-                if ( 0x4d46 != ( mBuf[listNum] << 8 | mBuf[listNum + 1] ) )break;
-                if(plenDebug)serial.writeString(",mfOK");
-                listNum += 2; // MF
-                if ( fileName != ( num2Hex(mBuf[listNum]) << 4 | num2Hex(mBuf[listNum + 1]) ) )break;
-                if(plenDebug)serial.writeString(",fileOK");
-                listNum += 4;// slot,flame
-                let time = num2Hex(mBuf[listNum])<<12 | num2Hex(mBuf[listNum+1])<<8 | num2Hex(mBuf[listNum+2])<<4 | num2Hex(mBuf[listNum+3]);
-                listNum += 4;
-                for (let val = 0; val < SERVO_NUM_USED; val++)
-                {
-                    let numHex = num2Hex(mBuf[listNum])<<12 | num2Hex(mBuf[listNum+1])<<8 | num2Hex(mBuf[listNum+2])<<4 | num2Hex(mBuf[listNum+3]);
-                    if (numHex >= 0x7fff)
-                    {
-                        numHex = numHex - 0x10000;
-                    } else {
-                        numHex = numHex & 0xffff;
-                    }
-                    data[val] = numHex;
-                    if(plenDebug)serial.writeNumber(data[val]);
-                    listNum += 4;
-                }
-                setAngle(data, time);
-                if(!loopBool)break;
-            }
+        let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let command = 0x3e;//">"
+        let listLen = 43;
+        let loopBool = false;
+        let plenDebug :boolean = false;
+        if(flameNum == 0xff){
+            flameNum = 0;
+            loopBool = true;
         }
+        let readAdr =  0x32 + 860 * fileName + flameNum * listLen;
+        let error = 0;
+        while (1) {
+            let mBuf = reep(readAdr, listLen);
+            readAdr += listLen;
+            if (mBuf[0] == 0xff) break;
+            let mf = "";    //=null ?
+            let listNum = 0;
+            if(command != mBuf[listNum])break;
+            if(plenDebug)serial.writeString(",>OK");
+            listNum += 1; // >
+            if ( 0x4d46 != ( mBuf[listNum] << 8 | mBuf[listNum + 1] ) )break;
+            if(plenDebug)serial.writeString(",mfOK");
+            listNum += 2; // MF
+            if ( fileName != ( num2Hex(mBuf[listNum]) << 4 | num2Hex(mBuf[listNum + 1]) ) )break;
+            if(plenDebug)serial.writeString(",fileOK");
+            listNum += 4;// slot,flame
+            let time = num2Hex(mBuf[listNum])<<12 | num2Hex(mBuf[listNum+1])<<8 | num2Hex(mBuf[listNum+2])<<4 | num2Hex(mBuf[listNum+3]);
+            listNum += 4;
+            for (let val = 0; val < SERVO_NUM_USED; val++){
+                let numHex = num2Hex(mBuf[listNum])<<12 | num2Hex(mBuf[listNum+1])<<8 | num2Hex(mBuf[listNum+2])<<4 | num2Hex(mBuf[listNum+3]);
+                if (numHex >= 0x7fff){
+                    numHex = numHex - 0x10000;
+                } else {
+                    numHex = numHex & 0xffff;
+                }
+                data[val] = numHex;
+                if(plenDebug)serial.writeNumber(data[val]);
+                listNum += 4;
+            }
+            setAngle(data, time);
+            if(!loopBool)break;
+        }
+    }
 
     export function setAngle(angle: number[], msec: number) {
         let step = [0, 0, 0, 0, 0, 0, 0, 0];

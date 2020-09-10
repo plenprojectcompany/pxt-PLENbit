@@ -58,9 +58,13 @@
   "plenbit|block": "PLEN:bit",
   "{id:category}Plenbit": "Plenbit",
   "plenbit.direction|block":"方角 (°)",
-  "plenbit.readMic|block":"マイク %num が %low以下 または %up 以上のとき)",
+  "plenbit.readMic|block":" %num マイクが %low以下 または %up 以上のとき",
   "plenbit.walk|block":"前進を %mode",
   "plenbit.WalkMode.Move|block":"する",
   "plenbit.WalkMode.Stop|block":"止める",
-  "plenbit.changeMotionSpeed|block":"モーションスピード %speed"
+  "plenbit.changeMotionSpeed|block":"モーションスピード %speed",
+  "plenbit.resetPosition|block":"保存されている初期位置を削除",
+  "plenbit.savePositon|block":"位置を保存 %servoNum %adjustNum",
+  "plenbit.servoAdjust|block":"サーボ調整 %servoNum %adjustNum",
+  "plenbit.servoFree|block":"サーボをフリーにする"
 }
