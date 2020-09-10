@@ -102,12 +102,19 @@ namespace plenbit {
     enum MoveMotions {
 
     }
+    export enum WalkMode {
+        //% block="move"
+        Move = 1,
+        //% block="stop"
+        Stop = 0
+    }
 
     let motionSpeed = 15;
     let servoNum = 0x08;
     //[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
     export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let servoAngle = [1000, 630, 300, 600, 240, 600, 1000, 720];
+    let SERVO_NUM_USED = 8;
     let romAdr1 = 0x56;
     let initBle = false;
     let initPCA9865 = false;
@@ -126,18 +133,29 @@ namespace plenbit {
     //% blockId=PLEN:bit_Sensor
     //% block="read sensor %num"
     export function sensorLR(num: LedLr) {
-        let neko = 0;
-        if (num == 16) {
-            neko = AnalogPin.P2;
-        } else {
-            neko = AnalogPin.P0;
-        }
-        return pins.analogReadPin(neko);
+        return pins.analogReadPin( (num == 16) ? AnalogPin.P2 : AnalogPin.P0 );
+    }
+
+    //% blockId=PLEN:bit_Mic
+    //% advanced=true
+    //% block="read Mic %num is If (Mic <= %low OR %up <= Mic)"
+    export function readMic(num: LedLr,low: number,up: number){
+        let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
+        return ( pins.analogReadPin(n) <= low || up <= pins.analogReadPin(n) ) ? true:false;
     }
 
     //% block
     export function direction() {
         return Math.atan2(input.magneticForce(Dimension.X), input.magneticForce(Dimension.Z)) * 180 / 3.14 + 180
+    }
+
+    //% block
+    //% advanced=true
+    //% speed.min=0 speed.max=20
+    export function changeMotionSpeed(speed: number) {
+        if(0 <= speed && speed <= 20){motionSpeed = speed;}
+        if(speed <= 0){motionSpeed = 0;}
+        if(speed >= 20){motionSpeed = 20;}
     }
 
     //% blockId=PLEN:bit_servo
@@ -199,87 +217,111 @@ namespace plenbit {
         motion(fileName);
     }
 
+    let modeNum=0;
+    //% block="walk %mode"
+    //% advanced=true
+    export function walk(mode: WalkMode){
+        
+        if(mode == 1){
+            if(modeNum == 0){
+                modeNum = 0;
+            }else if(modeNum == 100){
+                modeNum = 0;
+            }
+        }else{
+            if(modeNum == 1){
+                modeNum = 2;
+            }else{
+                modeNum = 100;
+            }
+        }
+        switch(modeNum){
+            case 0:
+                motionFlame(StdMotions.WalkForward, 0);
+                motionFlame(StdMotions.WalkForward, 1);
+                modeNum = 1;
+                //break;
+            case 1:
+                motionFlame(StdMotions.WalkForward, 2);
+                motionFlame(StdMotions.WalkForward, 3);
+                motionFlame(StdMotions.WalkForward, 4);
+                motionFlame(StdMotions.WalkForward, 5);
+                motionFlame(StdMotions.WalkForward, 6);
+                motionFlame(StdMotions.WalkForward, 7);
+                break;
+            case 2:
+                motionFlame(StdMotions.WalkForward, 8);
+                motionFlame(StdMotions.WalkForward, 9);
+                modeNum = 0;
+                break;
+            default:
+                break;
+        }
+    }
+
     //% blockId=PLEN:bit_motion
     //% block="play motion number %fileName"
     //% fileName.min=0 fileName.max=73
     //% advanced=true
-    export function motion(fileName: number) {
-        let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        let command = ">";//0x3e
-        let listLen = 43;
-        let readAdr = 0x32 + 860 * fileName;
-        //serial.writeNumber(fileName)
-        //serial.writeString(",fileName")
-        //serial.writeNumber(readAdr)
-        //serial.writeString(",adr")
-        let error = 0;
-        while (1) {
-            if (error == 1) {
-                break;
-            }
+    export function motion(fileName: number ) {
+        doMotion(fileName,0xff);
+    }
 
-            let mBuf = reep(readAdr, listLen);
-            readAdr += listLen;
-            if (mBuf[0] == 0xff) {
-                break;
+    //% block="play motion number %fileName number%flameNum"
+    //% fileName.min=0 fileName.max=73
+    //% flameNum.min=0 flameNum.max=20
+    //% advanced=true
+    export function motionFlame(fileName: number, flameNum: number) {
+        doMotion(fileName,flameNum);
+    }
+    
+    function doMotion(fileName: number, flameNum: number) {
+            let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            let command = 0x3e;//">"
+            let listLen = 43;
+            let loopBool = false;
+            let plenDebug :boolean = false;
+            if(flameNum == 0xff){
+                flameNum = 0;
+                loopBool = true;
             }
-
-            let mf = "";    //=null ?
-            for (let i = 0; i < listLen; i++) {
-                let num = mBuf.getNumber(NumberFormat.Int8LE, i);
-                mf += numToHex(num);
-            }
-            //serial.writeString(",Nonull")
-            let listNum = 0;
-            while (listLen > listNum) {
-                if (command != mf[listNum]) {
-                    listNum += 1;
-                    continue;
-                } //serial.writeString(",>OK")
+            let readAdr =  0x32 + 860 * fileName + flameNum * listLen;
+            let error = 0;
+            while (1) 
+            {
+                let mBuf = reep(readAdr, listLen);
+                readAdr += listLen;
+                if (mBuf[0] == 0xff) break;
+                let mf = "";    //=null ?
+                let listNum = 0;
+                if(command != mBuf[listNum])break;
+                if(plenDebug)serial.writeString(",>OK");
                 listNum += 1; // >
-                //serial.writeString(mf[listNum]);
-                //serial.writeString(mf[listNum] + 1);
-                if ("mf" != (mf[listNum] + mf[listNum + 1])) {
-                    //if (0x4d != (mf[listNum])) {
-                    listNum += 2;
-                    continue;
-                } //serial.writeString(",mfOK")
+                if ( 0x4d46 != ( mBuf[listNum] << 8 | mBuf[listNum + 1] ) )break;
+                if(plenDebug)serial.writeString(",mfOK");
                 listNum += 2; // MF
-
-                //if (fileName != int((_mf[listNum] + _mf[listNum + 1]), 16)) {
-                if (fileName != parseIntM(mf[listNum] + mf[listNum + 1])) {
-                    error = 1;
-                    break;
-                }
-                //serial.writeString(",fileOK")
+                if ( fileName != ( num2Hex(mBuf[listNum]) << 4 | num2Hex(mBuf[listNum + 1]) ) )break;
+                if(plenDebug)serial.writeString(",fileOK");
                 listNum += 4;// slot,flame
-
-                let times = (mf[listNum] + mf[listNum + 1] + mf[listNum + 2] + mf[listNum + 3])
-                let time = (parseIntM(times));
+                let time = num2Hex(mBuf[listNum])<<12 | num2Hex(mBuf[listNum+1])<<8 | num2Hex(mBuf[listNum+2])<<4 | num2Hex(mBuf[listNum+3]);
                 listNum += 4;
-                let val = 0;
-                while (1) {
-                    if ((listLen < (listNum + 4)) || (command == mf[listNum]) || (24 < val)) {
-                        setAngle(data, time);
-                        break;
-                    }
-                    let num = (mf[listNum] + mf[listNum + 1] + mf[listNum + 2] + mf[listNum + 3]);
-                    let numHex = (parseIntM(num));
-                    if (numHex >= 0x7fff) {
+                for (let val = 0; val < SERVO_NUM_USED; val++)
+                {
+                    let numHex = num2Hex(mBuf[listNum])<<12 | num2Hex(mBuf[listNum+1])<<8 | num2Hex(mBuf[listNum+2])<<4 | num2Hex(mBuf[listNum+3]);
+                    if (numHex >= 0x7fff)
+                    {
                         numHex = numHex - 0x10000;
                     } else {
                         numHex = numHex & 0xffff;
                     }
                     data[val] = numHex;
-                    //serial.writeNumber(data[val]);
-                    //serial.writeString(",")
-                    val = val + 1;
+                    if(plenDebug)serial.writeNumber(data[val]);
                     listNum += 4;
                 }
+                setAngle(data, time);
+                if(!loopBool)break;
             }
         }
-    }
-
 
     export function setAngle(angle: number[], msec: number) {
         let step = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -297,111 +339,36 @@ namespace plenbit {
             }
             //basic.pause(1); //Nakutei yoi
         }
-        //for (let val = 0; val < 8; val++) {
-        //    servoAngle[val] = angle[val];
-        //    servoWrite(val, (servoAngle[val] / 10));
-        //}
     }
 
-    function hexToInt(num: number) {
-        let i = 0;
+    function num2Hex(num: number) {
+        let i:number = 0;
         if (48 <= num && num <= 57) {
-            i = num - 48;
-        } else if (65 <= num && num <= 70) {
-            i = num - 65 + 10;
-        } else if (97 <= num && num <= 102) {
-            i = num - 97 + 10;
-        }
-        return i;
-    }
-
-    function numToHex(num: number) {
-        let i = "";
-        if (48 <= num && num <= 57) {
-            i = (num - 48).toString();
+            i = (num - 48);
         } else if (62 <= num && num <= 77) {
             switch (num) {
-                case 62: i = ">"; break;
-                case 65: i = "a"; break;
-                case 66: i = "b"; break;
-                case 67: i = "c"; break;
-                case 68: i = "d"; break;
-                case 69: i = "e"; break;
-                case 70: i = "f"; break;
-                case 77: i = "m"; break;
-                default: i = "";
+                //case 62: i = 0x3e; break;
+                case 65: i = 0x0a; break;
+                case 66: i = 0x0b; break;
+                case 67: i = 0x0c; break;
+                case 68: i = 0x0d; break;
+                case 69: i = 0x0e; break;
+                case 70: i = 0x0f; break;
+                //case 77: i = 0x4d; break;
+                default: i = 0;break;
             }
         } else if (97 <= num && num <= 102) {
             switch (num) {
-                case 97: i = "a"; break;
-                case 98: i = "b"; break;
-                case 99: i = "c"; break;
-                case 100: i = "d"; break;
-                case 101: i = "e"; break;
-                case 102: i = "f"; break;
-                //case 109: i = "m"; break;
-                default: i = "";
+                case 97: i = 0x0a; break;
+                case 98: i = 0x0b; break;
+                case 99: i = 0x0c; break;
+                case 100: i = 0x0d; break;
+                case 101: i = 0x0e; break;
+                case 102: i = 0x0f; break;
+                default: i = 0;break;
             }
-        } else {
-            //i = "m" + num.toString();
         }
         return i;
-    }
-
-    export function parseIntM(str: string) {
-        let len = str.length;
-        let num = [0, 0, 0, 0];
-        for (let i = 0; i < len; i++) {
-            switch (str[i]) {
-                case "a": num[i] = 10; break;
-                case "b": num[i] = 11; break;
-                case "c": num[i] = 12; break;
-                case "d": num[i] = 13; break;
-                case "e": num[i] = 14; break;
-                case "f": num[i] = 15; break;
-                case "A": num[i] = 10; break;
-                case "B": num[i] = 11; break;
-                case "C": num[i] = 12; break;
-                case "D": num[i] = 13; break;
-                case "E": num[i] = 14; break;
-                case "F": num[i] = 15; break;
-                default:
-                    num[i] = parseInt(str[i]);
-                    break;
-            }
-        }
-        let hex = 0;
-        switch (len) {
-            case 4:
-                hex = (num[len - 4] * 0x1000);
-            case 3:
-                hex += (num[len - 3] * 0x0100);
-            case 2:
-                hex += (num[len - 2] * 0x0010);
-            case 1:
-                hex += (num[len - 1] * 0x0001);
-        }
-        return hex;
-    }
-
-    export function toString16(dec: number) {
-        let val = [0, 0, 0, 0];
-        let listHex = "";
-        listHex = "0123456789ABCDEF";
-        val[4] = Math.idiv(dec, 0x1000);
-        val[3] = Math.idiv(dec - val[4] * 0x1000, 0x100);
-        val[2] = Math.idiv(dec - val[4] * 0x1000 - val[3] * 0x100, 0x10);
-        val[1] = dec - val[4] * 0x1000 - val[3] * 0x100 - val[2] * 0x10;
-        return ("" + listHex.charAt(val[4]) + listHex.charAt(val[3]) + listHex.charAt(val[2]) + listHex.charAt(val[1]));
-    }
-
-    export function bufToStr(mBuf: Buffer) {
-        let mf = "";    //=null ?
-        for (let i = 0; i < mBuf.length; i++) {
-            let num = mBuf.getNumber(NumberFormat.Int8LE, i);
-            mf += numToHex(num);
-        }
-        return mf;
     }
 
     function weep(eepAdr: number, num: number) {
@@ -425,64 +392,37 @@ namespace plenbit {
         data[1] = eepAdr & 0xFF;
         // need adr change code
         pins.i2cWriteBuffer(romAdr1, data);
-        let value = (pins.i2cReadBuffer(romAdr1, num, false));
-        return value;
+        return pins.i2cReadBuffer(romAdr1, num, false);
     }
 
     //% block
     //% advanced=true
     export function savePositon(servoNum: number, adjustNum: number) {
-        let adjStr = "";
-        let adjStrTop = 0;
-        let adjStrDown = 0;
-
-        adjStr = toString16(servoSetInit[servoNum] + adjustNum);//1000->03e8
-
-        if (3 == adjStr.length) {
-            adjStr = 0 + adjStr;
-        }
-        adjStrTop = parseIntM(adjStr[0] + adjStr[1]); //03->3
-        adjStrDown = parseIntM(adjStr[2] + adjStr[3]); //e8->232
-
-        weep(servoNum * 2 + 2, adjStrTop);
-        weep(servoNum * 2 + 3, adjStrDown);
+        adjustNum = servoSetInit[servoNum] + adjustNum;
         weep(0, 1);    //write flag
+        weep(servoNum * 2 + 2, (adjustNum & 0xff00) >> 8 );
+        weep(servoNum * 2 + 3, adjustNum & 0xff);
     }
 
     function loadPos() {
         let readBuf = reep(0x00, 1);
-        if (readBuf[0] == 0x01) {
+        if (readBuf[0] == 0x01){
             readBuf = reep(0x02, 16);
-            for (let i = 0; i < 8; i++) {
-                let strRom1 = toString16(readBuf[i * 2]);
-                let strRom2 = toString16(readBuf[i * 2 + 1]);
-                servoSetInit[i] = parseIntM(strRom1[2] + strRom1[3] + strRom2[2] + strRom2[3]);
-                servoAngle[i] = parseIntM(strRom1[2] + strRom1[3] + strRom2[2] + strRom2[3]);
+            for (let i = 0; i < 8; i++){
+                servoSetInit[i] = (readBuf[i * 2] << 8) | (readBuf[i * 2 + 1]);
+                servoAngle[i] = servoSetInit[i];
             }
         }
     }
     
     //% block
     //% advanced=true
-    export function resetPosition()
-    {
-        let adjStr = "";
-        let adjStrTop = 0;
-        let adjStrDown = 0;
-        for (let servoNum = 0; servoNum < 8; servoNum++)
-        {
-            adjStr = toString16(servoSetInit[servoNum]);//1000->03e8
-            if (3 == adjStr.length)
-            {
-                adjStr = 0 + adjStr;
-            }
-            adjStrTop = parseIntM(adjStr[0] + adjStr[1]); //03->3
-            adjStrDown = parseIntM(adjStr[2] + adjStr[3]); //e8->232
-
-            weep(servoNum * 2 + 2, adjStrTop);
-            weep(servoNum * 2 + 3, adjStrDown);
-        }
+    export function resetPosition(){
         weep(0, 0);    //write flag reset
+        for (let n = 0; n < 8; n++){
+            weep(n * 2 + 2, (servoSetInit[n] & 0xff00) >> 8 );
+            weep(n * 2 + 3, servoSetInit[n] & 0xff);
+        }
     }
 
     //% block
@@ -498,6 +438,38 @@ namespace plenbit {
             basic.pause(0.5);
         }
         return adjustNum;
+    }
+
+    function parseIntM(str: string) {
+        let len = str.length;
+        let num = [0, 0, 0, 0];
+        for (let i = 0; i < len; i++) {
+            switch (str[i]) {
+                case "a": num[i] = 10; break;
+                case "b": num[i] = 11; break;
+                case "c": num[i] = 12; break;
+                case "d": num[i] = 13; break;
+                case "e": num[i] = 14; break;
+                case "f": num[i] = 15; break;
+                case "A": num[i] = 10; break;
+                case "B": num[i] = 11; break;
+                case "C": num[i] = 12; break;
+                case "D": num[i] = 13; break;
+                case "E": num[i] = 14; break;
+                case "F": num[i] = 15; break;
+                default:
+                    num[i] = parseInt(str[i]);
+                    break;
+            }
+        }
+        let hex = 0;
+        switch (len) {
+            case 4: hex = (num[len - 4] * 0x1000);
+            case 3: hex += (num[len - 3] * 0x0100);
+            case 2: hex += (num[len - 2] * 0x0010);
+            case 1: hex += (num[len - 1] * 0x0001);
+        }
+        return hex;
     }
 
     function bleInit() {

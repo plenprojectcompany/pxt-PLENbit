@@ -57,5 +57,10 @@
   "plenbit.servoInitialSet|block":"サーボモータ初期値設定",
   "plenbit|block": "PLEN:bit",
   "{id:category}Plenbit": "Plenbit",
-  "plenbit.direction|block":"方角 (°)"
+  "plenbit.direction|block":"方角 (°)",
+  "plenbit.readMic|block":"マイク %num が %low以下 または %up 以上のとき)",
+  "plenbit.walk|block":"前進を %mode",
+  "plenbit.WalkMode.Move|block":"する",
+  "plenbit.WalkMode.Stop|block":"止める",
+  "plenbit.changeMotionSpeed|block":"モーションスピード"
 }
