@@ -62,5 +62,5 @@
   "plenbit.walk|block":"前進を %mode",
   "plenbit.WalkMode.Move|block":"する",
   "plenbit.WalkMode.Stop|block":"止める",
-  "plenbit.changeMotionSpeed|block":"モーションスピード"
+  "plenbit.changeMotionSpeed|block":"モーションスピード %speed"
 }

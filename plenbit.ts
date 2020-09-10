@@ -149,8 +149,8 @@ namespace plenbit {
         return Math.atan2(input.magneticForce(Dimension.X), input.magneticForce(Dimension.Z)) * 180 / 3.14 + 180
     }
 
-    //% block
     //% advanced=true
+    //% block="Motion Speed %speed"
     //% speed.min=0 speed.max=20
     export function changeMotionSpeed(speed: number) {
         if(0 <= speed && speed <= 20){motionSpeed = speed;}
