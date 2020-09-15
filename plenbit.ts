@@ -195,14 +195,6 @@ namespace plenbit {
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
         return ( value <= pins.analogReadPin(n) ) ? true:false;
     }
-
-    //% blockId=PLEN:bit_Mic
-    //% block="read Mic %num is If (Mic <= %low OR %up <= Mic)"
-    //% advanced=true
-    export function readMic(num: LedLr,low: number,up: number){
-        let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
-        return ( pins.analogReadPin(n) <= low || up <= pins.analogReadPin(n) ) ? true:false;
-    }
     
     /**
      * Get the angle in the direction that "PLEN: bit" is facing
@@ -216,7 +208,6 @@ namespace plenbit {
      * Change the speed of the motion.
      * @param speed - 0 ~ 20, The larger this value, the faster.
      */
-    //% advanced=true
     //% block="Motion Speed %speed"
     //% speed.min=0 speed.max=20 speed.defl=15
     //% advanced=true
@@ -286,7 +277,6 @@ namespace plenbit {
 
     let modeNum=0;
     //% block="walk %mode"
-    //% advanced=true
     export function walk(mode: WalkMode){
         
         if(mode == 1){
