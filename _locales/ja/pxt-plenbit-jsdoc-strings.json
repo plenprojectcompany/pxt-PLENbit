@@ -1,3 +1,8 @@
 {
-  "plenbit": "Blocks for PLEN:bit"
+  "plenbit": "Blocks for PLEN:bit",
+  "plenbit.eyeled": "目のLEDを制御",
+  "plenbit.sensorLR":"左右どちらかのセンサーの値を読み取る",
+  "plenbit.initMic":"マイクブロックを使う場合、'最初だけ'に入れることで、基準値を取得できます",
+  "plenbit.checkMic":"マイクの条件を設定、基準値には'マイク初期化'の値を代入します、初期値100、初期基準値550",
+  "plenbit.checkDistane":"距離センサの条件を設定、初期値600"
 }

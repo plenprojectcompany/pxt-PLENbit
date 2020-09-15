@@ -6,17 +6,19 @@
 //% weight=100 color=#00A654 icon="\uf085" block="PLEN:bit"
 namespace plenbit {
     export enum LedLr {
-        //% block="A button side"
+        //% block="A button"
         AButtonSide = 8,
-        //% block="B button side"
+        //% block="B button"
         BButtonSide = 16
     }
+
     export enum LedOnOff {
         //% block="on"
         On = 0,
         //% block="off"
         Off = 1
     }
+
     export enum StdMotions {
         //% block="Walk Forward"
         WalkForward = 0x46,
@@ -49,16 +51,34 @@ namespace plenbit {
     }
 
     export enum BoxMotions {
+        //% block="Shake A Box"
         ShakeABox = 0x0a,
+        //% block="Pick Up High"
         PickUpHigh = 0x0b,
+        //% block="Pick Up Low"
         PickUpLow = 0x0c,
+        //% block="Receive a Box"
         ReceiveaBox = 0x0d,
+        //% block="Present a Box"
         PresentaBox = 0x0e,
+        //% block="Pass a Box"
         PassaBox = 0x0f,
+        //% block="Throw a Box"
         ThrowaBox = 0x10,
+        //% block="Put Down High"
         PutDownHigh = 0x11,
-        PutDownLow = 0x12
+        //% block="Put Down Low"
+        PutDownLow = 0x12,
+        //% block="Carry For ward"
+        CarryForward = 0x2A,
+        //% block="Carry L Turn"
+        CarryLTurn = 0x2B,
+        //% block="Carry R Turn"
+        CarryRTurn = 0x2c,
+        //% block="Carry Back"
+        CarryBack = 0x2d
     }
+
     export enum SocMotions {
         //% block="Defense Left Step"
         DefenseLStep = 0x14,
@@ -79,6 +99,7 @@ namespace plenbit {
         //% block="Pass To Right"
         PassToRight = 0x1c
     }
+
     export enum DanceMotions {
         //% block="Dance Left Step"
         DanceLStep = 0x1e,
@@ -99,9 +120,8 @@ namespace plenbit {
         //% block="Twist Dance"
         TwistDance = 0x26
     }
-    enum MoveMotions {
+    enum MoveMotions {}
 
-    }
     export enum WalkMode {
         //% block="move"
         Move = 1,
@@ -110,7 +130,6 @@ namespace plenbit {
     }
 
     let motionSpeed = 15;
-    let servoNum = 0x08;
     //[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
     export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let servoAngle = [1000, 630, 300, 600, 240, 600, 1000, 720];
@@ -118,6 +137,7 @@ namespace plenbit {
     let romAdr1 = 0x56;
     let initBle = false;
     let initPCA9865 = false;
+    //
     loadPos();
     eyeLed(LedOnOff.On);
 
@@ -136,22 +156,70 @@ namespace plenbit {
         return pins.analogReadPin( (num == 16) ? AnalogPin.P2 : AnalogPin.P0 );
     }
 
+    /**
+     * Make this block insert "on start", when using checkMic. Use by substitution to a variable.
+     * @param num - plenbit.LedLr.AButtonSide or BButtonSide 
+    */
+    //% block="Init Mic %num"
+    export function initMic(num: LedLr){
+        let cal = 0;
+        for (let i = 0; i < 100; i++) {
+            cal += pins.analogReadPin( (num == 16) ? AnalogPin.P2 : AnalogPin.P0 )
+        }
+        return cal = cal / 100
+    }
+
+    /**
+     * Check mic
+     * @param num - pins
+     * @param value - Threshold
+     * @param adjust - Standard value
+     */
+    // Threshold "しきい値"
+    //% block="Side %num, Mic Value %value, InitValue $adjust"
+    //% value.min=0 value.max=255 value.defl=100
+    //% adjust.min=0 adjust.max=1023 adjust.defl=550
+    export function checkMic(num: LedLr,value:number,adjust:number){
+        let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
+        return ( pins.analogReadPin(n) <= (adjust-value) || (adjust+value) <= pins.analogReadPin(n) ) ? true:false;
+    }
+
+    /**
+     * Check distance
+     * @param num - pins
+     * @param value - Threshold
+     */
+    //% block="Side %num, Distance Value %value"
+    //% value.min=22 value.max=700 value.defl=600
+    export function checkDistane(num: LedLr,value:number){
+        let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
+        return ( value <= pins.analogReadPin(n) ) ? true:false;
+    }
+
     //% blockId=PLEN:bit_Mic
-    //% advanced=true
     //% block="read Mic %num is If (Mic <= %low OR %up <= Mic)"
+    //% advanced=true
     export function readMic(num: LedLr,low: number,up: number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
         return ( pins.analogReadPin(n) <= low || up <= pins.analogReadPin(n) ) ? true:false;
     }
-
+    
+    /**
+     * Get the angle in the direction that "PLEN: bit" is facing
+     */
     //% block
     export function direction() {
         return Math.atan2(input.magneticForce(Dimension.X), input.magneticForce(Dimension.Z)) * 180 / 3.14 + 180
     }
 
+    /**
+     * Change the speed of the motion.
+     * @param speed - 0 ~ 20, The larger this value, the faster.
+     */
     //% advanced=true
     //% block="Motion Speed %speed"
-    //% speed.min=0 speed.max=20
+    //% speed.min=0 speed.max=20 speed.defl=15
+    //% advanced=true
     export function changeMotionSpeed(speed: number) {
         if(0 <= speed && speed <= 20){motionSpeed = speed;}
         if(speed <= 0){motionSpeed = 0;}
@@ -163,6 +231,7 @@ namespace plenbit {
     //% num.min=0 num.max=11
     //% degrees.min=0 degrees.max=180
     export function servoWrite(num: number, degrees: number) {
+        let servoNum = 0x08;
         if (initPCA9865 == false) {
             secretIncantation();
             initPCA9865 = true;
@@ -198,19 +267,17 @@ namespace plenbit {
     export function soccerMotion(fileName: SocMotions) {
         motion(fileName);
     }
-
     // blockId=PLEN:bit_motion_box
     // block="play box motion %fileName"
+    //% advanced=true
     export function boxMotion(fileName: BoxMotions) {
         motion(fileName);
     }
-
     //% blockId=PLEN:bit_motion_dan
     //% block="play dance motion %fileName"
     export function danceMotion(fileName: DanceMotions) {
         motion(fileName);
     }
-
     // blockId=PLEN:bit_motion_m
     // block="play move motion %fileName"
     export function moveMotion(fileName: MoveMotions) {
@@ -268,9 +335,6 @@ namespace plenbit {
     }
 
     // block="play motion number %fileName number%flameNum"
-    // fileName.min=0 fileName.max=73
-    // flameNum.min=0 flameNum.max=20
-    // advanced=true
     function motionFlame(fileName: number, flameNum: number) {
         doMotion(fileName,flameNum);
     }
@@ -320,6 +384,14 @@ namespace plenbit {
         }
     }
 
+    /**
+     * Eight servos can be controlled at once
+     * @param angle 8 arrays
+     * @param msec 100 ~ 1000
+     */
+    //% block="Set Angle $angle, msec %msec"
+    //% msec.min=100 msec.max=1000 msec.defl=500
+    //% advanced=true
     export function setAngle(angle: number[], msec: number) {
         let step = [0, 0, 0, 0, 0, 0, 0, 0];
         msec = msec / motionSpeed;//now 15//default 10; //speedy 20   Speed Adj
