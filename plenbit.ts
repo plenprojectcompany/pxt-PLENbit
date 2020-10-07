@@ -172,12 +172,12 @@ namespace plenbit {
     /**
      * Check mic
      * @param num - pins
-     * @param value - Threshold
+     * @param value - Threshold , Max: 1023 - 'Standard Value'
      * @param adjust - Standard value
      */
     // Threshold "しきい値"
     //% block="Side %num, Mic Value %value, InitValue $adjust"
-    //% value.min=0 value.max=255 value.defl=100
+    //% value.min=0 value.max=511 value.defl=100
     //% adjust.min=0 adjust.max=1023 adjust.defl=550
     export function checkMic(num: LedLr,value:number,adjust:number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;

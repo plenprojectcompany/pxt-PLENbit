@@ -1,9 +1,24 @@
 {
   "plenbit": "Blocks for PLEN:bit",
-  "plenbit.eyeled": "目のLEDを制御",
-  "plenbit.sensorLR":"左右どちらかのセンサーの値を読み取る",
+  "plenbit.eyeled": "ロボットの目のLEDを点灯させる",
+  "plenbit.sensorLR":"センサの値を読み取る（Aボタン側 or Bボタン側）",
   "plenbit.initMic":"マイクブロックを使う場合、'最初だけ'に入れることで、基準値を取得できます",
   "plenbit.checkMic":"マイクの条件を設定、基準値には'マイク初期化'の値を代入します、初期値100、初期基準値550",
   "plenbit.checkDistane":"距離センサの条件を設定、初期値600",
-  "plenbit.serialRead":"BLE頭基板でPLENConnectと通信"
+  "plenbit.serialRead":"BLE頭基板でPLENConnectと通信",
+  "plenbit.direction":"ロボット正面方向の方角を取得",
+  "plenbit.changeMotionSpeed":"モーションの速度を変更",
+  "plenbit.servoWrite":"ロボットの関節を1つ指定し、角度を変える",
+  "plenbit.stdMotion":"ロボットに「基本モーション」の動きをさせる",
+  "plenbit.soccerMotion":"ロボットに「サッカーモーション」の動きをさせる",
+  "plenbit.boxMotion":"ロボットに「ボックスモーション」の動きをさせる",
+  "plenbit.danceMotion":"ロボットに「ダンスモーション」の動きをさせる",
+  "plenbit.walk":"連続歩行用。前進を「する」「しない」を切替できる",
+  "plenbit.motion":"モーションを番号として指定し、ロボットにその動きをさせる",
+  "plenbit.setAngle":"サーボモータの各角度と速度(変異時間)を指定し動作させる。モーションの作成などに使用する",
+  "plenbit.savePositon":"サーボモータと角度を指定しEEPROMに保存、初期位置設調整用",
+  "plenbit.resetPosition":"EEPROMに保存した位置情報を初期化、初期位置設調整用",
+  "plenbit.servoAdjust":"指定したサーボモータを細かく移動させる、初期位置設調整用",
+  "plenbit.servoInitialSet":"サーボモータを初期位置に移動",
+  "plenbit.servoFree":"サーボモータをフリーにする"
 }
