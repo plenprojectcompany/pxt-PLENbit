@@ -23,7 +23,7 @@ input.onButtonPressed(Button.A, function () {
 
 ### PLEN:bit Basic
 
-```block
+```blocks
 plenbit.servoInitialSet()
 basic.showIcon(IconNames.Happy)
 
@@ -46,7 +46,8 @@ input.onButtonPressed(Button.AB, function () {
 ```
 
 ### Distance sensor Basic
-```block
+
+```blocks
 basic.forever(function () {
     if (plenbit.checkDistane(plenbit.LedLr.BButtonSide, 600)) {
         basic.showIcon(IconNames.Happy)
@@ -57,7 +58,8 @@ basic.forever(function () {
 })
 ```
 ### Sound sensor Basic
-```block
+
+```blocks
 let mic = plenbit.initMic(plenbit.LedLr.AButtonSide)
 basic.showIcon(IconNames.Sad)
 basic.forever(function () {
@@ -70,7 +72,8 @@ basic.forever(function () {
 ```
 
 ### Walking
-```block
+
+```blocks
 // Type A
 input.onButtonPressed(Button.A, function () {
     plenbit.stdMotion(plenbit.StdMotions.WalkForward)
@@ -87,7 +90,8 @@ input.onButtonPressed(Button.B, function () {
 ```
 
 ### Fall over
-```block
+
+```blocks
 basic.showIcon(IconNames.Happy)
 basic.forever(function () {
     if (input.acceleration(Dimension.Z) < -512) {
@@ -100,7 +104,8 @@ basic.forever(function () {
 ```
 
 ### Dodge the wall
-```block
+
+```blocks
 basic.forever(function () {
     if (plenbit.checkDistane(plenbit.LedLr.BButtonSide, 600)) {
         basic.showIcon(IconNames.Sad)
@@ -115,7 +120,8 @@ basic.forever(function () {
 ```
 
 ### Dodge the wall 2
-```block
+
+```blocks
 basic.forever(function () {
     if (plenbit.checkDistane(plenbit.LedLr.BButtonSide, 600)) {
         plenbit.walk(plenbit.WalkMode.Stop)
@@ -131,7 +137,8 @@ basic.forever(function () {
 ```
 
 ### GO NORTH
-```block
+
+```blocks
 let direction = 0
 basic.forever(function () {
     direction = plenbit.direction()
@@ -148,7 +155,8 @@ basic.forever(function () {
 })
 ```
 ### Let's make a motion!
-```block
+
+```blocks
 plenbit.servoInitialSet()
 basic.showIcon(IconNames.Happy)
 
@@ -169,9 +177,10 @@ function L_Punch () {
 ```
 
 ### Remote control
-// Requires two micro:bits
 
-```block
+Requires two micro:bits
+
+```blocks
 radio.setGroup(0)
 basic.showIcon(IconNames.Happy)
 
@@ -196,7 +205,8 @@ input.onButtonPressed(Button.B, function () {
 ```
 
 ### Distance to cm
-```block
+
+```blocks
 let dis = 0
 let Adjust = 20
 basic.showIcon(IconNames.SmallDiamond)
@@ -213,7 +223,8 @@ basic.forever(function () {
 ```
 
 ### Servo Control
-```block
+
+```blocks
 basic.showIcon(IconNames.Happy)
 plenbit.servoInitialSet()
 input.onButtonPressed(Button.A, function () {
@@ -222,7 +233,8 @@ input.onButtonPressed(Button.A, function () {
 ```
 
 ### Sensor watching
-```block
+
+```blocks
 basic.forever(function () {
     serial.writeValue("mic", plenbit.sensorLR(plenbit.LedLr.AButtonSide))
     serial.writeValue("dis", plenbit.sensorLR(plenbit.LedLr.BButtonSide))
@@ -230,7 +242,8 @@ basic.forever(function () {
 ```
 
 ### Servo Adjust
-```block
+
+```blocks
 /**
  * How to use
  * 1.Push A to start correction
@@ -241,7 +254,6 @@ basic.forever(function () {
  * 6.Reset, then Push B to walk
  * If PLEN does not fall over, setting is complete
  */
-
 let loop = false
 let servoNum = 0
 let adjNum = 0
