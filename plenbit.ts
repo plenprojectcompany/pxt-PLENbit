@@ -3,7 +3,7 @@
 /**
  * Blocks for PLEN:bit
  */
-//% weight=100 color=#00A654 icon="\uf085" block="PLEN:bit"
+//% weight=100 color=#00A654 icon="\uf0a0" block="PLEN:bit"
 namespace plenbit {
     export enum LedLr {
         //% block="A button"
