@@ -3,7 +3,7 @@
   "plenbit.eyeLed": "ロボットの目のLEDを点灯させる",
   "plenbit.sensorLR":"センサの値を読み取る（Aボタン側 or Bボタン側）",
   "plenbit.initMic":"マイクブロックを使う場合、'最初だけ'に入れることで、基準値を取得できます",
-  "plenbit.checkMic":"マイクの条件を設定、基準値には'マイク初期化'の値を代入します、初期値100、初期基準値550",
+  "plenbit.checkMic":"マイクの条件を設定、基準値には'マイク初期化'の値を代入します、初期値150、初期基準値550",
   "plenbit.checkDistane":"距離センサの条件を設定、初期値600",
   "plenbit.serialRead":"BLE頭基板でPLENConnectと通信",
   "plenbit.direction":"ロボット正面方向の方角を取得",
@@ -20,5 +20,7 @@
   "plenbit.resetPosition":"EEPROMに保存した位置情報を初期化、初期位置設調整用",
   "plenbit.servoAdjust":"指定したサーボモータを細かく移動させる、初期位置設調整用",
   "plenbit.servoInitialSet":"サーボモータを初期位置に移動",
-  "plenbit.servoFree":"サーボモータをフリーにする"
+  "plenbit.servoFree":"サーボモータをフリーにする",
+  "plenbit.setColor":"ロボットの目のLEDを色を選択して点灯させる。フルカラー対応のLEDのみ",
+  "plenbit.createPlenEye":"目のLEDのフルカラーの設定をする。Neopiexlとブロックと組み合わせることが可能"
 }

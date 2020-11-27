@@ -74,7 +74,7 @@
   "plenbit.checkMic|block":"%num マイクが %value以上 (基準値 $adjust )",
   "plenbit.checkDistane|block":"%num 距離が %value 以上",
   "plenbit.setAngle|block":"サーボを%msecミリ秒で各角度を$angleにする",
-  "plenbit.createPlenEye|block":"目のLEDをフルカラーの設定にする",
+  "plenbit.createPlenEye|block":"目のLEDをフルカラーの設定",
   "plenbit.setColor|block":"目のLEDを %color色に点灯する",
-  "plenbit.clearPlenEye|block":"目のLEDのフルカラーの設定を削除する"
+  "plenbit.clearPlenEye|block":"目のLEDのフルカラーの設定を削除"
 }
