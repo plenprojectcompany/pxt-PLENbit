@@ -5,7 +5,7 @@
 PLEN:bit is a small humanoid robot with movable arms and legs. Anyone can easily use PLEN:bit through programing and onboard sensors.
 
 Please refer to this page about PLEN:bit
-https://plen.jp/wp/plenbit-assembly-kit/
+https://plen.jp/plenbit/#manual
 
 https://makecode.microbit.org/pkg/plenprojectcompany/pxt-PLENbit
 
@@ -63,7 +63,7 @@ basic.forever(function () {
 let mic = plenbit.initMic(plenbit.LedLr.AButtonSide)
 basic.showIcon(IconNames.Sad)
 basic.forever(function () {
-    if (plenbit.checkMic(plenbit.LedLr.AButtonSide, 100, mic)) {
+    if (plenbit.checkMic(plenbit.LedLr.AButtonSide, 150, mic)) {
         basic.showIcon(IconNames.Happy)
         plenbit.stdMotion(plenbit.StdMotions.ArmPataPata)
         basic.showIcon(IconNames.Sad)

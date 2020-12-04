@@ -17,7 +17,9 @@ basic.forever(function () {
         plenbit.stdMotion(plenbit.StdMotions.ArmPataPata)
     } else if (600 == plenbit.sensorLR(plenbit.LedLr.BButtonSide)) {
         plenbit.changeMotionSpeed(20)
-        plenbit.setAngle([0, 0, 0, 0, 0, 0, 0, 0], 500)
+        //plenbit.setAngle([0, 0, 0, 0, 0, 0, 0, 0], 500)
+        plenbit.setAngleToPosition(0,0,-90,0,0,0,90,0,500)
+        plenbit.setAngleToPosition(0,0,0,0,0,0,0,0,500)
         plenbit.motion(0)
     } else {
     	

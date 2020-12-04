@@ -76,5 +76,6 @@
   "plenbit.setAngle|block":"サーボを%msecミリ秒で各角度を$angleにする",
   "plenbit.createPlenEye|block":"目のLEDをフルカラーの設定",
   "plenbit.setColor|block":"目のLEDを %color色に点灯する",
-  "plenbit.clearPlenEye|block":"目のLEDのフルカラーの設定を削除"
+  "plenbit.clearPlenEye|block":"目のLEDのフルカラーの設定を削除",
+  "plenbit.setAngleToPosition|block":"サーボモーターの角度を変更する -180.0 ~ 180.0度|0:左肩  : $ls|1:左もも: $lt|2:左腕  : $la|3:左足  : $lf|4:右肩  : $rs|5:右もも: $rt|6:右腕  : $ra|7:右足  : $rf| %msec ミリ秒"
 }

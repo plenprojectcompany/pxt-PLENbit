@@ -421,6 +421,38 @@ namespace plenbit {
             if(!loopBool)break;
         }
     }
+    
+    /**
+     * Eight servos can be controlled at once
+     * @param angle 8 arrays : -90 ~ 90
+     * @param msec 100 ~ 1000
+     * @param ls -90 ~ 90
+     * @param lt -90 ~ 90
+     * @param la -90 ~ 90
+     * @param lf -90 ~ 90
+     * @param rs -90 ~ 90
+     * @param rt -90 ~ 90
+     * @param ra -90 ~ 90
+     * @param rf -90 ~ 90
+     */
+    //% block="Set Angle -180.0 ~ 180.0|0:Left Shoulder : $ls|1:Left Thigh    : $lt|2:Left Arm      : $la|3:Left Foot     : $lf|4:Right Shoulder: $rs|5:Right Thigh   : $rt|6:Right Arm     : $ra|7:Right Foot    : $rf|msec %msec"
+    //% msec.min=100 msec.max=1000 msec.defl=500
+    //% ls.min=-90 ls.max=90 ls.defl=0
+    //% lt.min=-90 lt.max=90 lt.defl=0
+    //% la.min=-90 la.max=90 la.defl=0
+    //% lf.min=-90 lf.max=90 lf.defl=0
+    //% rs.min=-90 rs.max=90 rs.defl=0
+    //% rt.min=-90 rt.max=90 rt.defl=0
+    //% ra.min=-90 ra.max=90 ra.defl=0
+    //% rf.min=-90 rf.max=90 rf.defl=0
+    //% advanced=true
+    export function setAngleToPosition
+        (ls:number, lt:number, la:number, lf:number,
+         rs:number, rt:number, ra:number, rf:number, msec: number)
+    {
+        let angle = [ls*10, lt*10, la*10, lf*10,rs*10, rt*10, ra*10, rf*10];
+        setAngle(angle, msec);
+    }
 
     /**
      * Eight servos can be controlled at once
