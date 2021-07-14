@@ -7,6 +7,7 @@
 namespace plenbit {
     export enum LedLr {
         //% block="A button"
+        //% block.loc.ja="Aボタン側"
         AButtonSide = 8,
         //% block="B button"
         BButtonSide = 16
@@ -195,7 +196,7 @@ namespace plenbit {
 
     /**
      * Make this block insert "on start", when using checkMic. Use by substitution to a variable.
-     * @param num - plenbit.LedLr.AButtonSide or BButtonSide 
+     * @param num - plenbit.LedLr.AButtonSide or BButtonSide
     */
     //% block="Init Mic %num"
     //% weight=77
@@ -237,7 +238,7 @@ namespace plenbit {
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
         return ( value <= pins.analogReadPin(n) ) ? true:false;
     }
-    
+
     /**
      * Get the angle in the direction that "PLEN: bit" is facing
      */
@@ -326,7 +327,7 @@ namespace plenbit {
     //% block="walk %mode"
     //% weight=85
     export function walk(mode: WalkMode){
-        
+
         if(mode == 1){
             if(modeNum == 0){
                 modeNum = 0;
@@ -376,7 +377,7 @@ namespace plenbit {
     function motionFlame(fileName: number, flameNum: number) {
         doMotion(fileName,flameNum);
     }
-    
+
     function doMotion(fileName: number, flameNum: number) {
         let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         let command = 0x3e;//">"
@@ -421,7 +422,7 @@ namespace plenbit {
             if(!loopBool)break;
         }
     }
-    
+
     /**
      * Eight servos can be controlled at once
      * @param angle 8 arrays : -90 ~ 90
@@ -566,7 +567,7 @@ namespace plenbit {
             }
         }
     }
-    
+
     //% block
     //% advanced=true
     export function resetPosition(){
