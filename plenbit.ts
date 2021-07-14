@@ -535,7 +535,7 @@ namespace plenbit {
     }
 
     // blockId=PLEN:bit_reep
-    //% block="EEPROM %eepAdr| byte%num"
+    //% block="EEPROMのアドレス%eepAdr|から%num|byte読み込む"
     // eepAdr.min=910 eepAdr.max=2000
     // num.min=0 num.max=43
     // advanced=true
