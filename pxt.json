@@ -9,6 +9,7 @@
     "files": [
         "README.md",
         "plenbit.ts",
+        "_locales/ja/pxt-plenbit-strings.json",
         "_locales/ja/pxt-plenbit-jsdoc-strings.json"
     ],
     "testFiles": [
