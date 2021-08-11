@@ -6,126 +6,126 @@
 //% weight=100 color=#00A654 icon="\uf0a0" block="PLEN:bit"
 namespace plenbit {
     export enum LedLr {
-        //% block="Aボタン側"
+        //% block="A button"
         AButtonSide = 8,
-        //% block="Bボタン側"
+        //% block="B button"
         BButtonSide = 16
     }
 
     export enum LedOnOff {
-        //% block="オン"
+        //% block="on"
         On = 0,
-        //% block="オフ"
+        //% block="off"
         Off = 1
     }
 
     export enum StdMotions {
-        //% block="前に進む"
+        //% block="Walk Forward"
         WalkForward = 0x46,
-        //% block="左に回る"
+        //% block="Walk Left Turn"
         WalkLTurn = 0x47,
-        //% block="右に回る"
+        //% block="Walk Right Turn"
         WalkRTurn = 0x48,
-        //% block="後ろに進む"
+        //% block="Walk Back"
         WalkBack = 0x49,
-        //% block="左ステップ"
+        //% block="Left step"
         LStep = 0x00,
-        //% block="前ステップ"
+        //% block="Forward step"
         FStep = 0x01,
-        //% block="右ステップ"
+        //% block="Right step"
         RStep = 0x02,
-        //% block="えっへん"
+        //% block="A hem"
         AHem = 0x03,
-        //% block="おじき"
+        //% block="Bow"
         Bow = 0x04,
-        //% block="こくはく"
+        //% block="Propose"
         Propose = 0x05,
-        //% block="ハグ"
+        //% block="Hug"
         Hug = 0x06,
-        //% block="はくしゅ"
+        //% block="Clap"
         Clap = 0x07,
-        //% block="ハイタッチ"
+        //% block="Highfive"
         HighFive = 0x08,
-        //% block="腕をパタパタする"
+        //% block="Arm PataPata"
         ArmPataPata = 0x29
     }
 
     export enum BoxMotions {
-        //% block="箱をふる"
+        //% block="Shake A Box"
         ShakeABox = 0x0a,
-        //% block="箱を高くとる"
+        //% block="Pick Up High"
         PickUpHigh = 0x0b,
-        //% block="箱を低くとる"
+        //% block="Pick Up Low"
         PickUpLow = 0x0c,
-        //% block="箱をうけとる"
+        //% block="Receive a Box"
         ReceiveaBox = 0x0d,
-        //% block="箱をあげる"
+        //% block="Present a Box"
         PresentaBox = 0x0e,
-        //% block="箱をわたす"
+        //% block="Pass a Box"
         PassaBox = 0x0f,
-        //% block="箱をなげる"
+        //% block="Throw a Box"
         ThrowaBox = 0x10,
-        //% block="箱をおとす"
+        //% block="Put Down High"
         PutDownHigh = 0x11,
-        //% block="箱をおく"
+        //% block="Put Down Low"
         PutDownLow = 0x12,
-        //% block="箱を持って前に進む"
+        //% block="Carry For ward"
         CarryForward = 0x2A,
-        //% block="箱を持って左に回る"
+        //% block="Carry L Turn"
         CarryLTurn = 0x2B,
-        //% block="箱を持って右に回る"
+        //% block="Carry R Turn"
         CarryRTurn = 0x2c,
-        //% block="箱を持って後ろに進む"
+        //% block="Carry Back"
         CarryBack = 0x2d
     }
 
     export enum SocMotions {
-        //% block="左ディフェンス"
+        //% block="Defense Left Step"
         DefenseLStep = 0x14,
-        //% block="ドリブル"
+        //% block="Dribble"
         Dribble = 0x15,
-        //% block="右ディフェンス"
+        //% block="Defense Right Step"
         DefenseRStep = 0x16,
-        //% block="左キック"
+        //% block="Left Kick"
         LKick = 0x17,
-        //% block="ダッシュ"
+        //% block="Long Dribble"
         LongDribble = 0x18,
-        //% block="右キック"
+        //% block="Right Kick"
         RKick = 0x19,
-        //% block="左パス"
+        //% block="Pass To Left"
         PassToLeft = 0x1a,
-        //% block="パスちょうだい"
+        //% block="Pass It To Me"
         PassItToMe = 0x1b,
-        //% block="右パス"
+        //% block="Pass To Right"
         PassToRight = 0x1c
     }
 
     export enum DanceMotions {
-        //% block="ダンス左ステップ"
+        //% block="Dance Left Step"
         DanceLStep = 0x1e,
-        //% block="ダンス前ステップ"
+        //% block="Dance Forward Step"
         DanceFStep = 0x1f,
-        //% block="ダンス右ステップ"
+        //% block="Dance Right Step"
         DanceRStep = 0x20,
-        //% block="ダンスポーズ"
+        //% block="Dance Fisnish Pose"
         DanceFisnishPose = 0x21,
-        //% block="ダンスアップダウン"
+        //% block="Dance Up Down"
         DanceUpDown = 0x22,
-        //% block="ダンスくねくね"
+        //% block="Wiggle Dance"
         WiggleDance = 0x23,
-        //% block="ダンス後ろステップ"
+        //% block="Dance Back Step"
         DanceBStep = 0x24,
-        //% block="ダンスおじぎ"
+        //% block="Dance Bow"
         DanceBow = 0x25,
-        //% block="ダンスツイスト"
+        //% block="Twist Dance"
         TwistDance = 0x26
     }
     enum MoveMotions {}
 
     export enum WalkMode {
-        //% block="する"
+        //% block="move"
         Move = 1,
-        //% block="止める"
+        //% block="stop"
         Stop = 0
     }
 
@@ -142,7 +142,7 @@ namespace plenbit {
     loadPos();
     eyeLed(LedOnOff.On);
 
-    //% block="目のLEDをフルカラーの設定"
+    //% block="PLEN Eye"
     // weight=0
     //% blockSetVariable=plenStrip
     //% advanced=true
@@ -153,7 +153,7 @@ namespace plenbit {
         return plenStrip;
     }
 
-    //% block="目のLEDを %color色に点灯する"
+    //% block="Show color %color for Eye LED"
     //% color.defl=NeoPixelColors.Green
     //% weight=99
     export function setColor(color: NeoPixelColors)
@@ -162,14 +162,14 @@ namespace plenbit {
       plenStrip.showColor(neopixel.colors(color))
     }
 
-    //% block="目のLEDのフルカラーの設定を削除"
+    //% block="clear eye led"
     // weight=98
     //% advanced=true
     export function clearPlenEye(): void {
         plenStrip.clear();
     }
 
-    //% block="目のLEDを %onoff|にする"
+    //% block="eye led is %onoff"
     //% weight=100
     export function eyeLed(ledOnOff: LedOnOff) {
         if(plenEyeCreated)clearPlenEye();
@@ -187,7 +187,7 @@ namespace plenbit {
     }
 
     //% blockId=PLEN:bit_Sensor
-    //% block="センサー%num|の値を読み取る"
+    //% block="read sensor %num"
     //% weight=76
     export function sensorLR(num: LedLr) {
         return pins.analogReadPin( (num == 16) ? AnalogPin.P2 : AnalogPin.P0 );
@@ -195,9 +195,9 @@ namespace plenbit {
 
     /**
      * Make this block insert "on start", when using checkMic. Use by substitution to a variable.
-     * @param num - plenbit.LedLr.AButtonSide or BButtonSide
+     * @param num - plenbit.LedLr.AButtonSide or BButtonSide 
     */
-    //% block="%num マイク初期化"
+    //% block="Init Mic %num"
     //% weight=77
     //% blockSetVariable=mic
     export function initMic(num: LedLr):number{
@@ -216,7 +216,7 @@ namespace plenbit {
      * @param adjust - Standard value
      */
     // Threshold "しきい値"
-    //% block="%num マイクが %value以上 (基準値 $adjust )"
+    //% block="Side %num, Mic Value %value, InitValue $adjust"
     //% value.min=0 value.max=511 value.defl=150
     //% adjust.min=0 adjust.max=1023 adjust.defl=550
     //% weight=78
@@ -230,19 +230,18 @@ namespace plenbit {
      * @param num - pins
      * @param value - Threshold
      */
-    //% block="%num 距離が %value 以上"
+    //% block="Side %num, Distance Value %value"
     //% value.min=22 value.max=700 value.defl=600
     //% weight=79
     export function checkDistane(num: LedLr,value:number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
         return ( value <= pins.analogReadPin(n) ) ? true:false;
     }
-
+    
     /**
      * Get the angle in the direction that "PLEN: bit" is facing
      */
-    //% block"Direction (°)"
-    //% block="方角 (°)"
+    //% block
     //% weight=75
     export function direction() {
         return Math.atan2(input.magneticForce(Dimension.X), input.magneticForce(Dimension.Z)) * 180 / 3.14 + 180
@@ -252,7 +251,7 @@ namespace plenbit {
      * Change the speed of the motion.
      * @param speed - 0 ~ 50, The larger this value, the faster.
      */
-    //% block="モーションスピード %speed"
+    //% block="Motion Speed %speed"
     //% speed.min=0 speed.max=50 speed.defl=20
     //% advanced=true
     export function changeMotionSpeed(speed: number) {
@@ -262,7 +261,7 @@ namespace plenbit {
     }
 
     //% blockId=PLEN:bit_servo
-    //% block="サーボモータ %num|番を %degrees|度にする"
+    //% block="servo motor %num|number %degrees|degrees"
     //% num.min=0 num.max=11
     //% degrees.min=0 degrees.max=180
     //% weight=84
@@ -294,40 +293,40 @@ namespace plenbit {
     }
 
     //% blockId=PLEN:bit_motion_std
-    //% block="基本モーション %filename|をする"
+    //% block="play std motion %fileName"
     //% weight=90
     export function stdMotion(fileName: StdMotions) {
         motion(fileName);
     }
     //% blockId=PLEN:bit_motion_Soc
-    //% block="サッカーモーション %filename|をする"
+    //% block="play soccer motion %fileName"
     //% weight=89
     export function soccerMotion(fileName: SocMotions) {
         motion(fileName);
     }
     // blockId=PLEN:bit_motion_box
-    //% block="ボックスモーション %filename|をする"
+    // block="play box motion %fileName"
     //% advanced=true
     export function boxMotion(fileName: BoxMotions) {
         motion(fileName);
     }
     //% blockId=PLEN:bit_motion_dan
-    //% block="ダンスモーション %filename|をする"
+    //% block="play dance motion %fileName"
     //% weight=88
     export function danceMotion(fileName: DanceMotions) {
         motion(fileName);
     }
     // blockId=PLEN:bit_motion_m
-    //% block="動きモーション %filename|をする"
+    // block="play move motion %fileName"
     export function moveMotion(fileName: MoveMotions) {
         motion(fileName);
     }
 
     let modeNum=0;
-    //% block="前進を %mode"
+    //% block="walk %mode"
     //% weight=85
     export function walk(mode: WalkMode){
-
+        
         if(mode == 1){
             if(modeNum == 0){
                 modeNum = 0;
@@ -366,7 +365,7 @@ namespace plenbit {
     }
 
     //% blockId=PLEN:bit_motion
-    //% block="モーション番号を選んで %filename|をする"
+    //% block="play motion number %fileName"
     //% fileName.min=0 fileName.max=73
     //% advanced=true
     export function motion(fileName: number ) {
@@ -377,7 +376,7 @@ namespace plenbit {
     function motionFlame(fileName: number, flameNum: number) {
         doMotion(fileName,flameNum);
     }
-
+    
     function doMotion(fileName: number, flameNum: number) {
         let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         let command = 0x3e;//">"
@@ -422,7 +421,7 @@ namespace plenbit {
             if(!loopBool)break;
         }
     }
-
+    
     /**
      * Eight servos can be controlled at once
      * @param angle 8 arrays : -90 ~ 90
@@ -436,15 +435,15 @@ namespace plenbit {
      * @param ra -90 ~ 90
      * @param rf -90 ~ 90
      */
-    //% block="サーボモーターの角度を変更する|-90.0 ~ 90.0度|0:左肩  : $ls|1:左もも: $lt|2:左腕  : $la|3:左足  : $lf|4:右肩  : $rs|5:右もも: $rt|6:右腕  : $ra|7:右足  : $rf| 移動時間(ミリ秒) %msec"
+    //% block="Set Angle -180.0 ~ 180.0|0:Left Shoulder : $ls|1:Left Thigh    : $lt|2:Left Arm      : $la|3:Left Foot     : $lf|4:Right Shoulder: $rs|5:Right Thigh   : $rt|6:Right Arm     : $ra|7:Right Foot    : $rf|msec %msec"
     //% msec.min=100 msec.max=1000 msec.defl=500
-    //% ls.min=-90 ls.max=90 ls.defl=0
+    //% ls.min=-90 ls.max=140 ls.defl=0
     //% lt.min=-90 lt.max=90 lt.defl=0
-    //% la.min=-90 la.max=0 la.defl=0
+    //% la.min=-90 la.max=90 la.defl=0
     //% lf.min=-90 lf.max=90 lf.defl=0
-    //% rs.min=-90 rs.max=90 rs.defl=0
+    //% rs.min=-140 rs.max=90 rs.defl=0
     //% rt.min=-90 rt.max=90 rt.defl=0
-    //% ra.min=0 ra.max=90 ra.defl=0
+    //% ra.min=-90 ra.max=90 ra.defl=0
     //% rf.min=-90 rf.max=90 rf.defl=0
     //% advanced=true
     export function setAngleToPosition
@@ -467,7 +466,7 @@ namespace plenbit {
      * @param angle 8 arrays
      * @param msec 100 ~ 1000
      */
-    //% block="サーボを%msecミリ秒で各角度を$angleにする"
+    //% block="Set Angle $angle, msec %msec"
     //% msec.min=100 msec.max=1000 msec.defl=500
     //% advanced=true
     export function setAngle(angle: number[], msec: number) {
@@ -535,7 +534,7 @@ namespace plenbit {
     }
 
     // blockId=PLEN:bit_reep
-    //% block="EEPROMのアドレス%eepAdr|から%num|byte読み取る"
+    // block="readEEPROM %eepAdr| byte%num"
     // eepAdr.min=910 eepAdr.max=2000
     // num.min=0 num.max=43
     // advanced=true
@@ -548,7 +547,7 @@ namespace plenbit {
         return pins.i2cReadBuffer(romAdr1, num, false);
     }
 
-    //% block="位置を保存 番号 %servoNum 角度 %adjustNum"
+    //% block
     //% advanced=true
     export function savePositon(servoNum: number, adjustNum: number) {
         adjustNum = servoSetInit[servoNum] + adjustNum;
@@ -567,8 +566,8 @@ namespace plenbit {
             }
         }
     }
-
-    //% block="保存されている初期位置を削除"
+    
+    //% block
     //% advanced=true
     export function resetPosition(){
         weep(0, 0);    //write flag reset
@@ -578,7 +577,7 @@ namespace plenbit {
         }
     }
 
-    //% block="サーボ調整 番号 %servoNum 角度 %adjustNum"
+    //% block
     //% advanced=true
     export function servoAdjust(servoNum: number, adjustNum: number) {
         let adjNum = servoSetInit[servoNum] + adjustNum
@@ -632,7 +631,7 @@ namespace plenbit {
     }
 
     //% blockId=PLEN:bit_BLE
-    //% block="スマホからコントロールできるようにする"
+    //% block="enable control from smartphone"
     //% advanced=true
     export function serialRead() {
         if (initBle == false) bleInit();
@@ -658,14 +657,14 @@ namespace plenbit {
         pins.digitalWritePin(DigitalPin.P16, 0);
     }
 
-    //% block="サーボモータ初期値設定"
+    //% block="servo motor initial"
     export function servoInitialSet() {
         for (let n = 0; n < 8; n++) {
             servoWrite(n, servoSetInit[n] / 10);
         }
     }
 
-    //% block="サーボをフリーにする"
+    //% block
     //% advanced=true
     export function servoFree() {
         //Power Free!
