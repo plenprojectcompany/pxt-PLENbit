@@ -663,7 +663,6 @@ namespace plenbit {
     //% weight=10 group="PLEN:bit v1"
     export function eyeLed(LedOnOff: LedOnOff) {
         if (plenEyeCreated) clearPlenEye();
-        pins.digitalWritePin(DigitalPin.P8, LedOnOff);
         pins.digitalWritePin(DigitalPin.P16, LedOnOff);
     }
 
