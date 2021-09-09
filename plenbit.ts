@@ -138,8 +138,9 @@ namespace plenbit {
 
     let motionSpeed = 20;
     //[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
-    export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
-    let servoAngle = [0, 0, 0, 0, 0, 0, 0, 0];
+    export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720, 900, 900, 900, 900];
+    const servoReverse = [false, false, false, false, false, false, false, false, true, true, true, true]; //サーボ反転
+    let servoAngle = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let SERVO_NUM_USED = 8;
     let romAdr1 = 0x56;
     let initBle = false;
@@ -552,7 +553,7 @@ namespace plenbit {
     //% block="servo motor initial"
     //% weight=4 group="Motion"
     export function servoInitialSet() {
-        for (let n = 0; n < 8; n++) {
+        for (let n = 0; n < 12; n++) {
             servoWriteInit(n, 0);
         }
     }
@@ -663,6 +664,7 @@ namespace plenbit {
     //% weight=10 group="PLEN:bit v1"
     export function eyeLed(LedOnOff: LedOnOff) {
         if (plenEyeCreated) clearPlenEye();
+        pins.digitalWritePin(DigitalPin.P8, LedOnOff);
         pins.digitalWritePin(DigitalPin.P16, LedOnOff);
     }
 
@@ -733,11 +735,14 @@ namespace plenbit {
      */
     //% blockId=PLEN:bit_servo_Init
     //% block="servo motor %num|number %degrees|degrees"
-    //% num.min=0 num.max=7
+    //% num.min=0 num.max=11
     //% degrees.min=-90 degrees.max=90 degrees.defl=0
     //% weight=8 group="Servo" advanced=true
     export function servoWriteInit(num: number, degrees: number) {
         let servoNum = 0x08;
+        if (servoReverse[num]) {
+            degrees *= -1;
+        }
         if (initPCA9865 == false) {
             secretIncantation();
             initPCA9865 = true;
