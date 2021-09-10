@@ -829,9 +829,6 @@ namespace plenbit {
                 } else {
                     writeAngle = Angle(input.runningTime() - startTime, val);
                 }
-                if (val == 0) {
-                    serial.writeLine(writeAngle.toString())
-                }
                 servoWriteInit(val, writeAngle);
             }// 1 loop: v1 10~17ms, v2 6~10ms
         }
