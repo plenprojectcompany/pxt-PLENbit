@@ -548,6 +548,17 @@ namespace plenbit {
     }
 
     /**
+     * Change the playing speed of the PLEN:bit motion.
+     * @param speed 0 ~ 50, The larger this value, the faster.
+     */
+    //% block="motion Speed %speed"
+    //% speed.min=1 speed.max=50 speed.defl=20
+    //% weight=4 group="Motion"
+    export function changeMotionSpeed(speed: number) {
+        motionSpeed = speed
+    }
+
+    /**
      * Set Servo Motors to initial position.
      */
     //% block="servo motor initial"
@@ -716,17 +727,6 @@ namespace plenbit {
     export function motion(fileName: number) {
         doMotion(fileName, 0xff);
         servoFree()
-    }
-
-    /**
-     * Change the playing speed of the PLEN:bit motion.
-     * @param speed 0 ~ 50, The larger this value, the faster.
-     */
-    //% block="motion Speed %speed"
-    //% speed.min=1 speed.max=50 speed.defl=20
-    //% weight=9 group="Servo" advanced=true
-    export function changeMotionSpeed(speed: number) {
-        motionSpeed = speed
     }
 
     /**
