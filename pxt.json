@@ -1,6 +1,6 @@
 {
     "name": "pxt-plenbit",
-    "version": "0.0.33",
+    "version": "1.0.4",
     "description": "plenbit",
     "dependencies": {
         "core": "*",
