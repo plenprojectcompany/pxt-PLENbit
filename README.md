@@ -260,14 +260,14 @@ let adjNum = 0
 plenbit.servoInitialSet()
 basic.showIcon(IconNames.Happy)
 basic.forever(function () {
-    if (input.buttonIsPressed(Button.AB)) {
-        plenbit.resetPosition()
-        basic.pause(1000)
-    }else if (input.buttonIsPressed(Button.A)) {
+    if (input.buttonIsPressed(Button.A)) {
         servoAdjust()
     } else if (input.buttonIsPressed(Button.B)) {
         plenbit.stdMotion(plenbit.StdMotions.WalkForward)
-    } 
+    } else if (input.buttonIsPressed(Button.AB)) {
+        plenbit.resetPosition()
+        basic.pause(1000)
+    }
 })
 function servoAdjust () {
     adjNum = 0
