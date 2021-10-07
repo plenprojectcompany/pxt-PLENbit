@@ -137,18 +137,19 @@ namespace plenbit {
     }
 
     let motionSpeed = 20;
-    export let servoInitArray = [1000, 630, 300, 600, 240, 600, 1000, 720, 900, 900, 900, 900];
-    let servoInitArraySave:number[] = []
+    export let servoInitArray = [1000, 630, 300, 600, 240, 600, 1000, 720, 900, 900, 900, 900]
+    let servoInitArraySave: number[] = []
     for (let i = 0; i < servoInitArray.length; i++) servoInitArraySave.push(servoInitArray[i])
-    const servoReverse = [false, false, false, false, false, false, false, false, true, true, true, true]; //サーボ反転
-    let servoAngle = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    let SERVO_NUM_USED = 8;
-    let romAdr1 = 0x56;
-    let initBle = false;
-    const eepromAdr = 0x56;
-    const PCA9865Adr = 0x6A;
-    let initEEPROMFlag = false;
-    let initPCA9865Flag = false;
+    const servoReverse = [false, false, false, false, false, false, false, false, true, true, true, true] //サーボ反転
+    let servoAngle = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    let SERVO_NUM_USED = 8
+    let romAdr1 = 0x56
+    let initBle = false
+    const eepromAdr = 0x56
+    const PCA9865Adr = 0x6A
+    let initEEPROMFlag = false
+    let initPCA9865Flag = false
+    let magneticForceOffset = { x: 0, y: 0, z: 0 }
     let walkingMode = 0;
     let pleEyeRGB = neopixel.rgb(0, 255, 0)
     let plenStrip: neopixel.Strip = null
@@ -610,9 +611,27 @@ namespace plenbit {
      */
     //% block="direction(°)"
     //% weight=9 group="Sensor"
-    //% deprecated=true
     export function direction() {
-        return 360 - input.compassHeading()
+        let x = Math.constrain(input.magneticForce(Dimension.X), -1000, 1000)
+        let y = Math.constrain(input.magneticForce(Dimension.Y), -1000, 1000)
+        let z = Math.constrain(input.magneticForce(Dimension.Z), -1000, 1000)
+        let r = Math.sqrt(x ** 2 + y ** 2 + z ** 2) / 1.5
+
+        let magneticForceX = x + magneticForceOffset.x
+        let magneticForceZ = z + magneticForceOffset.z
+
+        if (Math.abs(magneticForceX) > r) {
+            const offset = r - x
+            magneticForceX = x + offset
+            magneticForceOffset.x = offset
+        }
+        if (Math.abs(magneticForceZ) > r) {
+            const offset = r - z
+            magneticForceZ = z + offset
+            magneticForceOffset.z = offset
+        }
+
+        return Math.atan2(magneticForceX, magneticForceZ) * 180 / 3.14 + 180
     }
 
     /**
