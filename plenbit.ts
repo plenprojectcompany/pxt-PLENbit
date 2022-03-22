@@ -637,7 +637,9 @@ namespace plenbit {
     let dir = Math.atan2(magneticForceX, magneticForceZ) * 180 / 3.14 + 180
     if (dir >= 360) dir = 0
     if (dir < 0) dir = 359
-    return Math.floor(dir)
+    // TODO: 小数部分を切り捨てして返すかどうか選択できるようにする
+    // return Math.floor(dir)
+    return dir
   }
 
   /**
