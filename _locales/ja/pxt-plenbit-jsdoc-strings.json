@@ -15,7 +15,7 @@
   "plenbit.eyeLed": "[PLEN:bit v1] PLEN:bitの目のLEDを点灯/消灯を切り替えます。",
   "plenbit.initMic": "マイクブロックを使う場合、'最初だけ'に入れることで、基準値を取得できます",
   "plenbit.initMic|param|num": "Aボタン/Bボタン側",
-  "plenbit.motion": "モーションをPLEN:bitで再生します。\nモーション番号の一覧は、GitHub(https://github.com/plenprojectcompany/pxt-PLENbit/PLENbit_Motion.pdf)で確認できます。",
+  "plenbit.motion": "モーションをPLEN:bitで再生します。\nモーション番号の一覧は、GitHub(https://github.com/plenprojectcompany/pxt-PLENbit/blob/master/PLENbit_Motion.pdf)で確認できます。",
   "plenbit.motion|param|fileName": "モーション番号",
   "plenbit.sensorLR": "アナログセンサーの値を取得します。",
   "plenbit.sensorTH": "温湿度センサーAM2320の値を更新します。",
