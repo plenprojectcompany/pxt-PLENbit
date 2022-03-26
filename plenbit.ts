@@ -794,19 +794,19 @@ namespace plenbit {
     if (servoReverse[num]) degrees *= -1
     if (initEEPROMFlag == false) initEEPROM()
     if (initPCA9865Flag == false) initPCA9865()
-    let highByte = false;
+    let highByte = false
     let pwmVal = (servoInitArray[num] / 10 - degrees) * 100 * 226 / 10000
     if (pwmVal < 0) pwmVal = 0
     if (pwmVal > 384) pwmVal = 384
-    pwmVal = Math.round(pwmVal) + 0x66;
+    pwmVal = Math.round(pwmVal) + 0x66
     if (pwmVal > 0xFF) {
-      highByte = true;
+      highByte = true
     }
-    writePCA9865(servoNum + num * 4, pwmVal);
+    writePCA9865(servoNum + num * 4, pwmVal)
     if (highByte) {
-      writePCA9865(servoNum + num * 4 + 1, 0x01);
+      writePCA9865(servoNum + num * 4 + 1, 0x01)
     } else {
-      writePCA9865(servoNum + num * 4 + 1, 0x00);
+      writePCA9865(servoNum + num * 4 + 1, 0x00)
     }
     servoAngle[num] = degrees
   }
@@ -821,17 +821,19 @@ namespace plenbit {
     let servoNum = 0x08;
     if (initEEPROMFlag == false) initEEPROM()
     if (initPCA9865Flag == false) initPCA9865()
-    let highByte = false;
-    let pwmVal = degrees * 100 * 226 / 10000;
-    pwmVal = Math.round(pwmVal) + 0x66;
+    let highByte = false
+    let pwmVal = degrees * 100 * 226 / 10000
+    if (pwmVal < 0) pwmVal = 0
+    if (pwmVal > 384) pwmVal = 384
+    pwmVal = Math.round(pwmVal) + 0x66
     if (pwmVal > 0xFF) {
       highByte = true;
     }
-    writePCA9865(servoNum + num * 4, pwmVal);
+    writePCA9865(servoNum + num * 4, pwmVal)
     if (highByte) {
-      writePCA9865(servoNum + num * 4 + 1, 0x01);
+      writePCA9865(servoNum + num * 4 + 1, 0x01)
     } else {
-      writePCA9865(servoNum + num * 4 + 1, 0x00);
+      writePCA9865(servoNum + num * 4 + 1, 0x00)
     }
     servoAngle[num] = servoInitArray[num] / 10 - degrees
   }
