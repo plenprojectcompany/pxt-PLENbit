@@ -49,7 +49,7 @@ input.onButtonPressed(Button.AB, function () {
 
 ```blocks
 basic.forever(function () {
-    if (plenbit.checkDistane(plenbit.LedLr.BButtonSide, 600)) {
+    if (plenbit.checkDistane(plenbit.DataPin.BButtonSide, 600)) {
         basic.showIcon(IconNames.Happy)
         plenbit.stdMotion(plenbit.StdMotions.ArmPataPata)
     } else {
@@ -60,10 +60,10 @@ basic.forever(function () {
 ### Sound sensor Basic
 
 ```blocks
-let mic = plenbit.initMic(plenbit.LedLr.AButtonSide)
+let mic = plenbit.initMic(plenbit.DataPin.AButtonSide)
 basic.showIcon(IconNames.Sad)
 basic.forever(function () {
-    if (plenbit.checkMic(plenbit.LedLr.AButtonSide, 150, mic)) {
+    if (plenbit.checkMic(plenbit.DataPin.AButtonSide, 150, mic)) {
         basic.showIcon(IconNames.Happy)
         plenbit.stdMotion(plenbit.StdMotions.ArmPataPata)
         basic.showIcon(IconNames.Sad)
@@ -107,7 +107,7 @@ basic.forever(function () {
 
 ```blocks
 basic.forever(function () {
-    if (plenbit.checkDistane(plenbit.LedLr.BButtonSide, 600)) {
+    if (plenbit.checkDistane(plenbit.DataPin.BButtonSide, 600)) {
         basic.showIcon(IconNames.Sad)
         for (let index = 0; index < 3; index++) {
             plenbit.stdMotion(plenbit.StdMotions.WalkRTurn)
@@ -123,7 +123,7 @@ basic.forever(function () {
 
 ```blocks
 basic.forever(function () {
-    if (plenbit.checkDistane(plenbit.LedLr.BButtonSide, 600)) {
+    if (plenbit.checkDistane(plenbit.DataPin.BButtonSide, 600)) {
         plenbit.walk(plenbit.WalkMode.Stop)
         basic.showIcon(IconNames.Sad)
         for (let index = 0; index < 3; index++) {
@@ -211,7 +211,7 @@ let dis = 0
 let Adjust = 20
 basic.showIcon(IconNames.SmallDiamond)
 basic.forever(function () {
-    dis = plenbit.sensorLR(plenbit.LedLr.BButtonSide)
+    dis = plenbit.sensorLR(plenbit.DataPin.BButtonSide)
     dis = Math.map(dis, 0, 1023, 0, 330 - Adjust)
     dis = Math.map(dis, 60, 220, 50, 4)
     serial.writeValue("CM", dis)
@@ -236,8 +236,8 @@ input.onButtonPressed(Button.A, function () {
 
 ```blocks
 basic.forever(function () {
-    serial.writeValue("mic", plenbit.sensorLR(plenbit.LedLr.AButtonSide))
-    serial.writeValue("dis", plenbit.sensorLR(plenbit.LedLr.BButtonSide))
+    serial.writeValue("mic", plenbit.sensorLR(plenbit.DataPin.AButtonSide))
+    serial.writeValue("dis", plenbit.sensorLR(plenbit.DataPin.BButtonSide))
 })
 ```
 
@@ -254,9 +254,6 @@ basic.forever(function () {
  * 6.Reset, then Push B to walk
  * If PLEN does not fall over, setting is complete
  */
-let loop = false
-let servoNum = 0
-let adjNum = 0
 plenbit.servoInitialSet()
 basic.showIcon(IconNames.Happy)
 basic.forever(function () {
@@ -270,22 +267,18 @@ basic.forever(function () {
     }
 })
 function servoAdjust () {
-    adjNum = 0
     servoNum = 0
     basic.showNumber(servoNum)
     loop = true
     while (loop) {
         if (input.buttonIsPressed(Button.AB)) {
-            plenbit.savePositon(servoNum, adjNum)
+            plenbit.savePosition()
             servoNum += 1
-            adjNum = 0
             basic.showNumber(servoNum)
         } else if (input.buttonIsPressed(Button.A)) {
-            adjNum += 1
-            adjNum = plenbit.servoAdjust(servoNum, adjNum)
+            plenbit.servoInitValue[servoNum] += 1
         } else if (input.buttonIsPressed(Button.B)) {
-            adjNum += -1
-            adjNum = plenbit.servoAdjust(servoNum, adjNum)
+            plenbit.servoInitValue[servoNum] += -1
         } else if (servoNum > 7) {
             basic.showIcon(IconNames.Happy)
             basic.pause(2000)
