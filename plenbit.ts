@@ -149,7 +149,7 @@ namespace plenbit {
   const PCA9865Adr = 0x6A
   let initEEPROMFlag = false
   let initPCA9865Flag = false
-  let magneticForceOffset = { x: 0, z: 0 }
+  let magneticForceOffset = { x: 50, z: 50 }
   let walkingMode = 0;
   let pleEyeRGB = neopixel.rgb(0, 255, 0)
   let plenStrip: neopixel.Strip = null
