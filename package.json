@@ -1,0 +1,20 @@
+{
+  "name": "pxt-plenbit",
+  "version": "1.0.0",
+  "description": "PLEN:bit is a small humanoid robot with movable arms and legs. Anyone can easily use PLEN:bit through programing and onboard sensors.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plenprojectcompany/pxt-PLENbit.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/plenprojectcompany/pxt-PLENbit/issues"
+  },
+  "homepage": "https://github.com/plenprojectcompany/pxt-PLENbit#readme"
+}
