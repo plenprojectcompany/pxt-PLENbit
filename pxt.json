@@ -1,7 +1,7 @@
 {
     "name": "pxt-plenbit",
     "version": "1.0.9",
-    "description": "plenbit",
+    "description": "PLEN:bit is a small humanoid robot with movable arms and legs. Anyone can easily use PLEN:bit through programing and onboard sensors.",
     "dependencies": {
         "core": "*",
         "neopixel": "github:microsoft/pxt-neopixel#v0.7.3"
