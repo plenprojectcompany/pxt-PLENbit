@@ -417,7 +417,7 @@ namespace plenbit {
           if (serialDebug) serial.writeLine("Data Get Error! (Sensor data has missed " + (41 - DataTimeArray.length).toString() + " data)")
         }
 
-      } else { //v1の場合、動作周波数が大きい
+      } else { //v1の場合、動作周波数が低い
         for (let i = 0; i < 40; i++) {
           WaitHigh()
           WaitLow()
