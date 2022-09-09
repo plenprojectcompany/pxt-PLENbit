@@ -136,6 +136,29 @@ namespace plenbit {
     Humidity = 1
   }
 
+  export enum NeoPixelColors {
+    //% block=green
+    Green = 0x00FF00,
+    //% block=red
+    Red = 0xFF0000,
+    //% block=orange
+    Orange = 0xFFA500,
+    //% block=yellow
+    Yellow = 0xFFFF00,
+    //% block=blue
+    Blue = 0x0000FF,
+    //% block=indigo
+    Indigo = 0x4b0082,
+    //% block=violet
+    Violet = 0x8a2be2,
+    //% block=purple
+    Purple = 0xFF00FF,
+    //% block=white
+    White = 0xFFFFFF,
+    //% block=off
+    Black = 0x000000
+  }
+
   let motionSpeed = 20;
   export let servoInitArray = [1000, 630, 300, 600, 240, 600, 1000, 720, 900, 900, 900, 900]
   let servoInitArraySave: number[] = []
@@ -151,21 +174,21 @@ namespace plenbit {
   let initPCA9865Flag = false
   let magneticForceOffset = { x: 50, z: 50 }
   let walkingMode = 0;
-  let pleEyeRGB = neopixel.rgb(0, 255, 0)
-  let plenStrip: neopixel.Strip = null
   let plenEyeCreated = false;
   let hardwareVersion = parseInt(control.hardwareVersion())
   let AM2320LastUpdateTime_A = 0
   let AM2320LastUpdateTime_B = 0
   let temperature = 0
   let humidity = 0
+  let eyeColor = pins.createBuffer(3)
+  let eyeBrightnes = 127
 
   // 初期化
   servoInitialSet()
   eyeLed(LedOnOff.On)
+  eyeColor[1] = 255
   setEyeBrightness(20)
-  setColorRGB(0, 255, 0)
-  basic.pause(500)
+  basic.pause(1000)
   servoFree()
 
   // 検査用フラグ
@@ -483,6 +506,13 @@ namespace plenbit {
     }
   }
 
+  //フルカラーLEDを点灯
+  function setEyeLED() {
+    let data = pins.createBuffer(3)
+    for (let i = 0; i < 3; i++) data[i] = (eyeColor[i] * eyeBrightnes / 255) & 0xFF
+    ws2812b.sendBuffer(data, DigitalPin.P16)
+  }
+
   //PLEN:bitブロック
   //モーション
 
@@ -725,9 +755,8 @@ namespace plenbit {
   //% block="eye led is %LedOnOff"
   //% weight=10 group="PLEN:bit v1"
   export function eyeLed(LedOnOff: LedOnOff) {
-    if (plenEyeCreated) clearPlenEye();
-    pins.digitalWritePin(DigitalPin.P8, LedOnOff);
-    pins.digitalWritePin(DigitalPin.P16, LedOnOff);
+    pins.digitalWritePin(DigitalPin.P8, LedOnOff)
+    pins.digitalWritePin(DigitalPin.P16, LedOnOff)
   }
 
 
@@ -737,29 +766,10 @@ namespace plenbit {
    * [PLEN:bit v2] Change the eye led color of PLEN:bit.
    */
   //% block="show color %color for Eye LED"
-  //% color.defl=NeoPixelColors.Green
   //% weight=10 group="PLEN:bit v2"
   export function setColor(color: NeoPixelColors) {
-    if (!plenEyeCreated) createPlenEye();
-    pleEyeRGB = neopixel.colors(color)
-    plenStrip.showColor(pleEyeRGB)
-  }
-
-  //% block="PLEN Eye"
-  //% blockSetVariable=plenStrip
-  //% weight=9 group="PLEN:bit v2"
-  //% deprecated=true
-  export function createPlenEye(): neopixel.Strip {
-    plenStrip = neopixel.create(DigitalPin.P16, 2, NeoPixelMode.RGB_RGB)
-    plenEyeCreated = true;
-    return plenStrip;
-  }
-
-  //% block="clear eye led"
-  //% weight=8 group="PLEN:bit v2"
-  //% deprecated=true
-  export function clearPlenEye(): void {
-    plenStrip.clear();
+    for (let i = 0; i < 3; i++) eyeColor[i] = (color >> i * 8) & 0xFF
+    setEyeLED()
   }
 
 
@@ -918,7 +928,7 @@ namespace plenbit {
   //% weight=4 group="Servo" advanced=true
   export function setAngleToPosition
     (ls: number, lt: number, la: number, lf: number,
-    rs: number, rt: number, ra: number, rf: number, msec: number) {
+      rs: number, rt: number, ra: number, rf: number, msec: number) {
     let angle = [ls, lt, la, lf, rs, rt, ra, rf];
     setAngle(angle, msec);
   }
@@ -936,9 +946,10 @@ namespace plenbit {
   //% b.min=0 b.max=255 b.defl=0
   //% weight=10 group="PLEN:bit v2" advanced=true
   export function setColorRGB(r: number, g: number, b: number) {
-    if (!plenEyeCreated) createPlenEye();
-    pleEyeRGB = neopixel.rgb(r, g, b)
-    plenStrip.showColor(pleEyeRGB)
+    eyeColor[0] = r
+    eyeColor[1] = g
+    eyeColor[2] = b
+    setEyeLED()
   }
 
   /**
@@ -949,9 +960,8 @@ namespace plenbit {
   //% b.min=0 b.max=255 b.defl=127
   //% weight=9 group="PLEN:bit v2" advanced=true
   export function setEyeBrightness(b: number) {
-    if (!plenEyeCreated) createPlenEye();
-    plenStrip.setBrightness(b)
-    plenStrip.showColor(pleEyeRGB)
+    eyeBrightnes = b
+    setEyeLED()
   }
 
   //スペシャルキット

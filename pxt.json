@@ -4,7 +4,7 @@
     "description": "Extention Blocks for PLEN:bit – a small humanoid robot",
     "dependencies": {
         "core": "*",
-        "neopixel": "github:microsoft/pxt-neopixel#v0.7.3"
+        "ws2812b": "github:microsoft/pxt-ws2812b#v0.1.1"
     },
     "files": [
         "README.md",
