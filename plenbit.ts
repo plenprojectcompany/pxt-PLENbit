@@ -508,8 +508,11 @@ namespace plenbit {
 
   //フルカラーLEDを点灯
   function setEyeLED() {
-    let data = pins.createBuffer(3)
-    for (let i = 0; i < 3; i++) data[i] = (eyeColor[i] * eyeBrightnes / 255) & 0xFF
+    let data = pins.createBuffer(6)
+    for (let i = 0; i < 3; i++){
+        data[i] = (eyeColor[i] * eyeBrightnes / 255) & 0xFF
+        data[i+3] = data[i]
+    }
     ws2812b.sendBuffer(data, DigitalPin.P16)
   }
 
