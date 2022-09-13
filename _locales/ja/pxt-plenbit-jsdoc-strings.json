@@ -41,5 +41,6 @@
   "plenbit.setEyeBrightness": "[PLEN:bit v2] PLEN:bitの目の明るさを変えます。",
   "plenbit.soccerMotion": "サッカーモーションをPLEN:bitで再生します。",
   "plenbit.stdMotion": "基本モーションをPLEN:bitで再生します。",
-  "plenbit.walk": "連続歩行をPLEN:bitで再生します。"
+  "plenbit.walk": "連続歩行をPLEN:bitで再生します。",
+  "plenbit.checkIRSignal": "リモコンの赤外線信号をIRセンサーで調べます。"
 }

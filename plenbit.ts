@@ -700,56 +700,6 @@ namespace plenbit {
   }
 
 
-
-  /**
-   * Make this block insert "on start", when using checkMic. Use by substitution to a variable.
-   * @param num plenbit.LedLr.AButtonSide or BButtonSide
-  */
-  //% block="Init Mic %num"
-  //% blockSetVariable=mic
-  //% weight=6 group="Sensor"
-  //% deprecated=true
-  export function initMic(num: DataPin): number {
-    let cal = 0;
-    basic.pause(10);
-    for (let i = 0; i < 100; i++) {
-      cal += pins.analogReadPin((num == 1) ? AnalogPin.P2 : AnalogPin.P0)
-    }
-    return cal = cal / 100
-  }
-
-  /**
-   * Check mic
-   * @param num pins
-   * @param value Threshold , Max: 1023 - 'Standard Value'
-   * @param adjust Standard value
-   */
-  // Threshold "しきい値"
-  //% block="Side %num, Mic Value %value, InitValue $adjust"
-  //% value.min=0 value.max=511 value.defl=150
-  //% adjust.min=0 adjust.max=1023 adjust.defl=550
-  //% weight=5 group="Sensor"
-  //% deprecated=true
-  export function checkMic(num: DataPin, value: number, adjust: number) {
-    let n = (num == 1) ? AnalogPin.P2 : AnalogPin.P0;
-    return (pins.analogReadPin(n) <= (adjust - value) || (adjust + value) <= pins.analogReadPin(n)) ? true : false;
-  }
-
-  /**
-   * Check distance
-   * @param num pins
-   * @param value Threshold
-   */
-  //% block="Side %num, Distance Value %value"
-  //% value.min=22 value.max=700 value.defl=600
-  //% weight=4 group="Sensor"
-  //% deprecated=true
-  export function checkDistane(num: DataPin, value: number) {
-    let n = (num == 1) ? AnalogPin.P2 : AnalogPin.P0;
-    return (value <= pins.analogReadPin(n)) ? true : false;
-  }
-
-
   //v1専用
 
   /**
@@ -935,6 +885,43 @@ namespace plenbit {
     let angle = [ls, lt, la, lf, rs, rt, ra, rf];
     setAngle(angle, msec);
   }
+
+    // センサー
+
+    /**
+     * Receive a IR signal from a remote controller by IR sensor.
+     */
+    //% blockId=PLEN:bit_Sensor_IR
+    //% block="read %num side IR sensor"
+    //% weight=9 group="Sensor" advanced=true
+    export function checkIRSignal(num: DataPin) {
+        let data = []
+        let startTime = input.runningTimeMicros()
+        let signalLength = 0
+        while (plenbit.sensorLR(num) >= 100) {
+            signalLength = input.runningTimeMicros() - startTime
+            if (signalLength > 100000) return []
+        }
+        while (true) {
+            startTime = input.runningTimeMicros()
+            signalLength = 0
+            while (plenbit.sensorLR(num) < 100){}
+            while (plenbit.sensorLR(num) >= 100) {
+                signalLength = input.runningTimeMicros() - startTime
+                if (signalLength > 100000) break
+            }
+            if (signalLength > 100000) {
+                break
+            } else if (signalLength > 5000) {
+
+            } else if (signalLength > 1500) {
+                data.push(1)
+            } else {
+                data.push(0)
+            }
+        }
+        return data
+    }
 
 
   //v2専用

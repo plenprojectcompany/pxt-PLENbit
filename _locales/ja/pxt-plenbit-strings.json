@@ -64,6 +64,7 @@
   "plenbit.resetPosition|block": "true",
   "plenbit.savePositon|block": "true",
   "plenbit.sensorLR|block": "%num 側のアナログセンサー値を読み取る",
+  "plenbit.checkIRSignal|block": "%num 側の赤外線センサー値を読み取る",
   "plenbit.sensorTHvalue|block": "%data",
   "plenbit.sensorTH|block": "%num 側の温湿度センサー値を読み取る (シリアル通信 : %serial)",
   "plenbit.serialRead|block": "スマホからコントロールできるようにする",
