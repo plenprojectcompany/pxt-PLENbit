@@ -900,20 +900,18 @@ namespace plenbit {
         let signalLength = 0
         while (plenbit.sensorLR(num) >= 100) {
             signalLength = input.runningTimeMicros() - startTime
-            if (signalLength > 100000) return []
+            if (signalLength > 20000) return []
         }
         while (true) {
             startTime = input.runningTimeMicros()
             signalLength = 0
-            while (plenbit.sensorLR(num) < 100){}
+            while (plenbit.sensorLR(num) < 100) {}
             while (plenbit.sensorLR(num) >= 100) {
                 signalLength = input.runningTimeMicros() - startTime
-                if (signalLength > 100000) break
+                if (signalLength > 20000) break
             }
-            if (signalLength > 100000) {
+            if (signalLength > 20000) {
                 break
-            } else if (signalLength > 5000) {
-
             } else if (signalLength > 1500) {
                 data.push(1)
             } else {
