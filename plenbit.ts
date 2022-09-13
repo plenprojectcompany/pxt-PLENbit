@@ -509,9 +509,9 @@ namespace plenbit {
   //フルカラーLEDを点灯
   function setEyeLED() {
     let data = pins.createBuffer(6)
-    for (let i = 0; i < 3; i++){
-        data[i] = (eyeColor[i] * eyeBrightnes / 255) & 0xFF
-        data[i+3] = data[i]
+    for (let i = 0; i < 3; i++) {
+      data[i] = (eyeColor[i] * eyeBrightnes / 255) & 0xFF
+      data[i + 3] = data[i]
     }
     ws2812b.sendBuffer(data, DigitalPin.P16)
   }
@@ -886,40 +886,41 @@ namespace plenbit {
     setAngle(angle, msec);
   }
 
-    // センサー
+  // センサー
 
-    /**
-     * Receive a IR signal from a remote controller by IR sensor.
-     */
-    //% blockId=PLEN:bit_Sensor_IR
-    //% block="read %num side IR sensor"
-    //% weight=9 group="Sensor" advanced=true
-    export function checkIRSignal(num: DataPin) {
-        let data = []
-        let startTime = input.runningTimeMicros()
-        let signalLength = 0
-        while (plenbit.sensorLR(num) >= 100) {
-            signalLength = input.runningTimeMicros() - startTime
-            if (signalLength > 20000) return []
-        }
-        while (true) {
-            startTime = input.runningTimeMicros()
-            signalLength = 0
-            while (plenbit.sensorLR(num) < 100) {}
-            while (plenbit.sensorLR(num) >= 100) {
-                signalLength = input.runningTimeMicros() - startTime
-                if (signalLength > 20000) break
-            }
-            if (signalLength > 20000) {
-                break
-            } else if (signalLength > 1500) {
-                data.push(1)
-            } else {
-                data.push(0)
-            }
-        }
-        return data
+  /**
+   * Receive a IR signal from a remote controller by IR sensor.
+   */
+  //% blockId=PLEN:bit_Sensor_IR
+  //% block="read %num side IR sensor"
+  //% weight=9 group="Sensor" advanced=true
+  export function checkIRSignal(num: DataPin) {
+    let data = []
+    let startTime = input.runningTimeMicros()
+    let signalLength = 0
+    while (plenbit.sensorLR(num) >= 100) {
+      signalLength = input.runningTimeMicros() - startTime
+      if (signalLength > 20000) return []
     }
+    while (true) {
+      startTime = input.runningTimeMicros()
+      signalLength = 0
+      while (plenbit.sensorLR(num) < 100) { }
+      while (plenbit.sensorLR(num) >= 100) {
+        signalLength = input.runningTimeMicros() - startTime
+        if (signalLength > 20000) break
+      }
+      if (signalLength > 20000) {
+        break
+      } else if (signalLength > 1500) {
+        data.push(1)
+      } else {
+        data.push(0)
+      }
+    }
+    if (data[0] == 1 && data.length > 1) data.shift()
+    return data
+  }
 
 
   //v2専用
