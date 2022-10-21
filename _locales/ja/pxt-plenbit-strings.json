@@ -67,6 +67,7 @@
   "plenbit.checkIRSignal|block": "%num 側の赤外線センサー値を読み取る",
   "plenbit.sensorTHvalue|block": "%data",
   "plenbit.sensorTH|block": "%num 側の温湿度センサー値を読み取る (シリアル通信 : %serial)",
+  "plenbit.sensorCO2value|block": "Aボタン側のCO2センサー値を読み取る [ppm]",
   "plenbit.serialRead|block": "スマホからコントロールできるようにする",
   "plenbit.servoAdjust|block": "true",
   "plenbit.servoFree|block": "true",

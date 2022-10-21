@@ -180,6 +180,7 @@ namespace plenbit {
   let AM2320LastUpdateTime_B = 0
   let temperature = 0
   let humidity = 0
+  let co2ppm = 0
   let eyeColor = pins.createBuffer(3)
   let eyeBrightnes = 127
 
@@ -367,6 +368,7 @@ namespace plenbit {
     initBle = true;
   }
 
+  // 温湿度センサー
   function UpdateAM2320(dataPin: DigitalPin, serialDebug: boolean) {
     Test_isTHsensorSuccess = false
 
@@ -504,6 +506,55 @@ namespace plenbit {
         }
       }
     }
+  }
+
+  // CO2センサー
+  function ReadMHZ19C() {
+    let dataPin = DigitalPin.P0
+    let noSensor = false
+
+    function WaitHigh() {
+      if (!noSensor) {
+        for (let i = 0; i < 1500; i++) {
+          if (pins.digitalReadPin(dataPin) == 0) return -1
+          basic.pause(1)
+        }
+        noSensor = true
+      }
+      return -1
+    }
+
+    function WaitLow() {
+      if (!noSensor) {
+        for (let i = 0; i < 1500; i++) {
+          if (pins.digitalReadPin(dataPin) == 1) return -1
+          basic.pause(1)
+        }
+        noSensor = true
+      }
+      return -1
+    }
+
+    let T = 0
+    let TH = 0
+
+    WaitHigh()
+    WaitLow()
+    T = control.millis()
+    WaitHigh()
+    TH = control.millis() - T
+    WaitLow()
+    T = control.millis() - T
+
+    let co2ppmResult = co2ppm
+    if (Math.abs(T - 1000) < 100) {
+      co2ppmResult = Math.round(2000 * (TH - 2) / (T - 4))
+      co2ppm = co2ppmResult
+    }
+
+    if (noSensor) serial.writeLine("MH-Z19C is not responding! (Plsese check the CO2 Sensor connection)")
+
+    return co2ppmResult
   }
 
   //フルカラーLEDを点灯
@@ -674,31 +725,6 @@ namespace plenbit {
     // return Math.floor(dir)
     return dir
   }
-
-  /**
-   * Read the value from the AM2320 Temperature & Humidity sensor.
-   */
-  //% blockId=PLEN:bit_Sensor_SensorTH
-  //% block="read %num side TH sensor (serial output : %serial)"
-  //% weight=8 group="Sensor"
-  export function sensorTH(num: DataPin, serial: boolean) {
-    UpdateAM2320((num == 1) ? DigitalPin.P2 : DigitalPin.P0, serial)
-  }
-
-  /**
-   * Get the value of AM2320 Temperature & Humidity sensor.
-   */
-  //% blockId=PLEN:bit_Sensor_SensorTHvalue
-  //% block="%data"
-  //% weight=7 group="Sensor"
-  export function sensorTHvalue(data: THsensorMode) {
-    if (data == 1) {
-      return humidity
-    } else {
-      return temperature
-    }
-  }
-
 
   //v1専用
 
@@ -922,6 +948,39 @@ namespace plenbit {
     return data
   }
 
+  /**
+   * Read the value from the AM2320 Temperature & Humidity sensor.
+   */
+  //% blockId=PLEN:bit_Sensor_SensorTH
+  //% block="read %num side TH sensor (serial output : %serial)"
+  //% weight=8 group="Sensor" advanced=true
+  export function sensorTH(num: DataPin, serial: boolean) {
+    UpdateAM2320((num == 1) ? DigitalPin.P2 : DigitalPin.P0, serial)
+  }
+
+  /**
+   * Get the value of AM2320 Temperature & Humidity sensor.
+   */
+  //% blockId=PLEN:bit_Sensor_SensorTHvalue
+  //% block="%data"
+  //% weight=7 group="Sensor" advanced=true
+  export function sensorTHvalue(data: THsensorMode) {
+    if (data == 1) {
+      return humidity
+    } else {
+      return temperature
+    }
+  }
+
+  /**
+   * Get the value of MH-Z19C CO2 sensor.
+   */
+  //% blockId=PLEN:bit_Sensor_SensorCO2value
+  //% block="read A button side CO2 sensor [ppm]"
+  //% weight=6 group="Sensor" advanced=true
+  export function sensorCO2value() {
+    return ReadMHZ19C()
+  }
 
   //v2専用
 

@@ -20,6 +20,7 @@
   "plenbit.sensorLR": "アナログセンサーの値を取得します。",
   "plenbit.sensorTH": "温湿度センサーAM2320の値を更新します。",
   "plenbit.sensorTHvalue": "温湿度センサーAM2320の値を取得します。",
+  "plenbit.sensorCO2value": "CO2センサーMH-Z19Cの値を取得します。",
   "plenbit.serialRead": "[PLEN:bit スペシャルキット] PLEN Connect アプリから制御できるようにします。",
   "plenbit.servoInitialSet": "サーボモーターを初期値に戻します。",
   "plenbit.servoWriteInit": "番号で指定したサーボモーターの角度を変更します。その際、サーボモーターは、最大速度で動きます。",
