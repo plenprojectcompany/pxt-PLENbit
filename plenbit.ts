@@ -747,7 +747,7 @@ namespace plenbit {
   //% block="show color %color for Eye LED"
   //% weight=10 group="PLEN:bit v2"
   export function setColor(color: NeoPixelColors) {
-    for (let i = 0; i < 3; i++) eyeColor[i] = (color >> i * 8) & 0xFF
+    for (let i = 0; i < 3; i++) eyeColor[2 - i] = (color >> i * 8) & 0xFF
     setEyeLED()
   }
 
