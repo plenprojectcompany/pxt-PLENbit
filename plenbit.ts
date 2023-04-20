@@ -734,6 +734,16 @@ namespace plenbit {
   //% block="eye led is %LedOnOff"
   //% weight=10 group="PLEN:bit v1"
   export function eyeLed(LedOnOff: LedOnOff) {
+    //v2対応
+
+    if (LedOnOff) {
+      setColor(NeoPixelColors.Green)
+    } else {
+      setColor(NeoPixelColors.Black)
+    }
+
+    //NeoPixel通信終わるまでpause
+    basic.pause(1)
     pins.digitalWritePin(DigitalPin.P8, LedOnOff)
     pins.digitalWritePin(DigitalPin.P16, LedOnOff)
   }
